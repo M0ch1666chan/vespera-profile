@@ -1,0 +1,2701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vespera — Your Profile, Your World</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============ BASE ============ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07060f;
+  --panel:rgba(255,255,255,.035);
+  --line:rgba(255,255,255,.09);
+  --text:#ece9f7;
+  --muted:#9a94b8;
+  --a:#a78bfa;
+  --b:#22d3ee;
+  --c:#f472b6;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Outfit',system-ui,-apple-system,'Segoe UI',sans-serif;
+  overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+::selection{background:rgba(167,139,250,.35)}
+
+/* ============ BACKGROUND ============ */
+.bg-stars{
+  position:fixed;inset:0;z-index:-3;pointer-events:none;opacity:.75;
+  background-image:
+    radial-gradient(1px 1px at 20px 30px,#fff,transparent),
+    radial-gradient(1px 1px at 130px 80px,rgba(255,255,255,.8),transparent),
+    radial-gradient(1.5px 1.5px at 200px 160px,#fff,transparent),
+    radial-gradient(1px 1px at 90px 220px,rgba(255,255,255,.6),transparent),
+    radial-gradient(1px 1px at 260px 40px,rgba(255,255,255,.9),transparent),
+    radial-gradient(1px 1px at 320px 200px,rgba(255,255,255,.7),transparent);
+  background-size:340px 280px;
+  animation:twinkle 5s ease-in-out infinite alternate;
+}
+@keyframes twinkle{from{opacity:.35}to{opacity:.9}}
+.bg-aurora{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+.bg-aurora i{position:absolute;display:block;border-radius:50%;filter:blur(110px);opacity:.30}
+.bg-aurora i:nth-child(1){width:640px;height:640px;background:#7c3aed;top:-220px;left:-180px;animation:drift 22s ease-in-out infinite}
+.bg-aurora i:nth-child(2){width:520px;height:520px;background:#0891b2;top:12%;right:-200px;animation:drift 28s ease-in-out infinite reverse}
+.bg-aurora i:nth-child(3){width:600px;height:600px;background:#be185d;bottom:-260px;left:32%;animation:drift 34s ease-in-out infinite}
+@keyframes drift{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(70px,-50px) scale(1.15)}
+}
+
+/* ============ NAV ============ */
+.nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 32px;
+  background:rgba(7,6,15,.6);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:.4px}
+.logo .moon{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(140deg,#a78bfa,#f472b6 55%,#22d3ee);
+  box-shadow:0 0 18px rgba(167,139,250,.75);
+  position:relative;flex:none;
+}
+.logo .moon::after{
+  content:'';position:absolute;width:22px;height:22px;border-radius:50%;
+  background:#0a0814;top:-3px;right:-6px;
+}
+.nav-links{display:flex;gap:26px;align-items:center}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14.5px;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav .btn{padding:9px 20px;font-size:14px}
+@media(max-width:820px){.nav-links a:not(.btn){display:none}.nav{padding:14px 18px}}
+
+/* ============ BUTTONS ============ */
+.btn{
+  display:inline-block;border:none;cursor:pointer;font-family:inherit;
+  font-weight:600;font-size:15px;padding:13px 28px;border-radius:100px;
+  text-decoration:none;transition:transform .22s,box-shadow .22s,background .22s;
+  position:relative;
+}
+.btn.primary{
+  background:linear-gradient(100deg,#a78bfa,#f472b6 50%,#22d3ee);
+  background-size:200% auto;color:#0a0814;
+  box-shadow:0 10px 34px -10px rgba(167,139,250,.9);
+}
+.btn.primary:hover{background-position:right center;transform:translateY(-2px);box-shadow:0 16px 42px -10px rgba(244,114,182,.9)}
+.btn.ghost{background:rgba(255,255,255,.05);color:var(--text);border:1px solid var(--line)}
+.btn.ghost:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
+
+/* ============ HERO ============ */
+.hero{max-width:900px;margin:0 auto;padding:96px 24px 72px;text-align:center}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 16px;border-radius:100px;font-size:13.5px;font-weight:500;
+  background:rgba(167,139,250,.11);border:1px solid rgba(167,139,250,.28);
+  color:#d6c9ff;margin-bottom:26px;
+}
+.hero h1{
+  font-size:clamp(42px,7.4vw,82px);line-height:1.03;letter-spacing:-2.5px;
+  font-weight:800;margin-bottom:22px;
+}
+.grad{
+  background:linear-gradient(100deg,#a78bfa,#f472b6 42%,#22d3ee 78%,#a78bfa);
+  background-size:250% auto;
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent;
+  animation:shift 8s linear infinite;
+}
+@keyframes shift{to{background-position:250% center}}
+.hero p.sub{
+  font-size:clamp(15.5px,2vw,19px);color:var(--muted);max-width:640px;
+  margin:0 auto 34px;font-weight:300;
+}
+.hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+/* ============ SECTION ============ */
+section{padding:80px 24px;position:relative}
+.wrap{max-width:1180px;margin:0 auto}
+.sec-head{text-align:center;margin-bottom:52px}
+.sec-head h2{font-size:clamp(30px,4.4vw,48px);letter-spacing:-1.4px;font-weight:800;margin-bottom:14px}
+.sec-head p{color:var(--muted);max-width:600px;margin:0 auto;font-size:16.5px;font-weight:300}
+
+/* ============ STUDIO ============ */
+.studio-grid{
+  display:grid;grid-template-columns:minmax(0,0.92fr) minmax(0,1.08fr);
+  gap:36px;align-items:start;
+}
+@media(max-width:920px){.studio-grid{grid-template-columns:1fr}}
+
+.preview-col{
+  position:sticky;top:92px;
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+}
+@media(max-width:920px){.preview-col{position:static}}
+.preview-tag{
+  font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;
+  color:var(--muted);font-weight:600;display:flex;align-items:center;gap:8px;
+}
+.preview-tag .live{width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 10px #34d399;animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ============ PROFILE CARD ============ */
+.profile-card{
+  --accent:#a78bfa;
+  --accent2:#22d3ee;
+  --glow:1;
+  --card-bg:#100c1c;
+  position:relative;width:380px;max-width:100%;
+  border-radius:24px;overflow:hidden;
+  background:var(--card-bg);
+  border:1px solid rgba(255,255,255,.09);
+  box-shadow:0 40px 90px -30px rgba(0,0,0,.95), 0 0 0 1px rgba(255,255,255,.02) inset;
+  transition:width .25s ease,border-radius .25s ease;
+}
+#fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:6}
+
+/* ---- banner ---- */
+.banner{position:relative;height:132px;overflow:hidden;background:#150e26;transition:height .25s ease}
+.banner-layer{position:absolute;border-radius:50%;filter:blur(34px);opacity:.75}
+.banner-layer.b1{width:210px;height:210px;background:var(--accent);top:-90px;left:-40px;animation:blob1 12s ease-in-out infinite}
+.banner-layer.b2{width:180px;height:180px;background:var(--accent2);top:-60px;right:-30px;animation:blob2 15s ease-in-out infinite}
+.banner-layer.b3{width:160px;height:160px;background:var(--accent);bottom:-110px;left:45%;animation:blob1 18s ease-in-out infinite reverse;opacity:.5}
+@keyframes blob1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(46px,26px) scale(1.28)}}
+@keyframes blob2{0%,100%{transform:translate(0,0) scale(1.1)}50%{transform:translate(-40px,34px) scale(.85)}}
+
+.b-mist .banner-layer{filter:blur(46px);opacity:.32;background:#cbd5e1}
+.b-mist .b1{background:var(--accent)}
+.b-mist .b2{background:var(--accent2)}
+.b-mist .b3{background:#fff}
+
+.b-ocean{background:linear-gradient(180deg,#071426,#0b2540)}
+.b-ocean .banner-layer{filter:blur(24px)}
+.b-ocean .b1{background:#0ea5e9;opacity:.75;width:280px;height:120px;border-radius:50%;top:auto;bottom:-70px;left:-40px;animation:wave 7s ease-in-out infinite}
+.b-ocean .b2{background:#22d3ee;opacity:.6;width:240px;height:110px;border-radius:50%;top:auto;bottom:-80px;right:-30px;animation:wave 9s ease-in-out infinite reverse}
+.b-ocean .b3{opacity:0}
+@keyframes wave{0%,100%{transform:translateY(0) scaleX(1)}50%{transform:translateY(-16px) scaleX(1.15)}}
+
+.b-rain{background:#0a0d18}
+.b-rain .banner-layer{opacity:.28;filter:blur(40px)}
+.b-rain .b1{background:var(--accent2)}
+.b-rain .b2{background:var(--accent)}
+.b-rain .b3{opacity:0}
+.b-rain::after{
+  content:'';position:absolute;inset:-40%;
+  background-image:repeating-linear-gradient(102deg,transparent 0 13px,rgba(255,255,255,.22) 13px 14px);
+  background-size:32px 64px;
+  animation:rainfall .55s linear infinite;
+}
+@keyframes rainfall{from{background-position:0 0}to{background-position:-18px 64px}}
+
+.b-blossom{background:linear-gradient(160deg,#2a0f22,#160b19)}
+.b-blossom .banner-layer{opacity:.5;filter:blur(38px)}
+.b-blossom .b1{background:#fb7185}
+.b-blossom .b2{background:#f9a8d4}
+.b-blossom .b3{opacity:0}
+.b-blossom::after{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(4px 4px at 20% 30%,rgba(255,214,232,.85),transparent),
+    radial-gradient(3px 3px at 62% 20%,rgba(255,214,232,.7),transparent),
+    radial-gradient(5px 5px at 84% 62%,rgba(255,214,232,.8),transparent),
+    radial-gradient(3px 3px at 38% 76%,rgba(255,214,232,.6),transparent),
+    radial-gradient(4px 4px at 10% 82%,rgba(255,214,232,.7),transparent);
+  animation:petalDrift 9s ease-in-out infinite alternate;
+}
+@keyframes petalDrift{from{transform:translateY(-8px)}to{transform:translateY(12px)}}
+
+.b-gradient{
+  background:linear-gradient(115deg,var(--accent),var(--accent2),var(--accent),var(--accent2));
+  background-size:340% 340%;
+  animation:gradMove 11s ease infinite;
+}
+.b-gradient .banner-layer{opacity:0}
+@keyframes gradMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+.b-cosmos{background:radial-gradient(120% 140% at 50% 0%,#1b1136,#06040f 70%)}
+.b-cosmos .banner-layer{opacity:.35;filter:blur(48px)}
+.b-cosmos::after{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(1px 1px at 12% 24%,#fff,transparent),
+    radial-gradient(1px 1px at 38% 62%,#fff,transparent),
+    radial-gradient(1.6px 1.6px at 68% 18%,#fff,transparent),
+    radial-gradient(1px 1px at 86% 74%,#fff,transparent),
+    radial-gradient(1px 1px at 54% 88%,#fff,transparent),
+    radial-gradient(1.4px 1.4px at 26% 82%,#fff,transparent);
+  animation:twinkle 4s ease-in-out infinite alternate;
+}
+.banner-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;z-index:1}
+
+/* ---- card body ---- */
+.card-body{position:relative;padding:0 26px 30px;text-align:center;z-index:3}
+.avatar-outer{
+  position:relative;width:150px;height:150px;
+  margin:-64px auto 14px;
+  filter:drop-shadow(0 0 calc(9px * var(--glow)) var(--accent))
+         drop-shadow(0 0 calc(30px * var(--glow)) var(--accent));
+  transition:filter .3s,width .25s ease,height .25s ease,margin .25s ease;
+}
+.frame-deco{position:absolute;inset:-6px;background:var(--accent);opacity:0;transition:opacity .3s}
+.avatar-shape{position:absolute;inset:0;overflow:hidden;background:#100c1c;z-index:2}
+.avatar-shape img{width:100%;height:100%;object-fit:cover;display:block}
+
+.shape-flower{
+  -webkit-mask-image:var(--flower);mask-image:var(--flower);
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-position:center;mask-position:center;
+}
+
+.frame-neon .frame-deco{opacity:1;background:var(--accent);filter:drop-shadow(0 0 6px var(--accent)) drop-shadow(0 0 18px var(--accent))}
+.frame-celestial .frame-deco,
+.frame-roses .frame-deco,
+.frame-crystal .frame-deco,
+.frame-thorns .frame-deco,
+.frame-stars .frame-deco,
+.frame-butterfly .frame-deco,
+.frame-vines .frame-deco{opacity:1}
+.frame-glow .frame-deco{opacity:0}
+.frame-glow .avatar-outer{filter:drop-shadow(0 0 calc(18px * var(--glow)) var(--accent)) drop-shadow(0 0 calc(52px * var(--glow)) var(--accent))}
+
+.orbit{
+  position:absolute;inset:0;z-index:3;pointer-events:none;
+  opacity:0;transition:opacity .35s;
+  animation:spin var(--dur,16s) linear infinite;
+}
+.orbit.on{opacity:1}
+.orbit i{
+  position:absolute;left:50%;top:50%;
+  width:22px;height:22px;margin:-11px 0 0 -11px;
+  display:grid;place-items:center;
+  font-style:normal;font-size:15px;line-height:1;
+  filter:drop-shadow(0 0 8px var(--accent));
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.wing{
+  position:absolute;top:50%;width:56px;height:86px;margin-top:-43px;
+  opacity:0;transition:opacity .35s;
+  background:linear-gradient(180deg,#ffffff,var(--accent) 65%,transparent);
+  filter:blur(1.4px) drop-shadow(0 0 12px var(--accent));
+  z-index:1;
+}
+.wing.l{left:-52px;clip-path:polygon(100% 0,100% 100%,52% 94%,14% 72%,0 42%,26% 24%,58% 8%)}
+.wing.r{right:-52px;transform:scaleX(-1);clip-path:polygon(100% 0,100% 100%,52% 94%,14% 72%,0 42%,26% 24%,58% 8%)}
+.frame-wings .wing{opacity:.92}
+
+.halo{
+  position:absolute;left:50%;top:-30px;width:86px;height:20px;margin-left:-43px;
+  border:3px solid var(--accent);border-radius:50%;
+  box-shadow:0 0 20px var(--accent),0 0 42px var(--accent);
+  opacity:0;transition:opacity .35s;z-index:4;
+}
+.frame-halo .halo{opacity:1;animation:haloFloat 3.4s ease-in-out infinite}
+@keyframes haloFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+.p-name{
+  font-size:23px;font-weight:700;letter-spacing:-.4px;margin-bottom:2px;
+  transition:font-family .2s,font-size .2s,color .2s;
+  line-height:1.15;
+}
+.p-handle{font-size:13.5px;color:var(--muted);margin-bottom:16px;transition:font-family .2s,color .2s}
+.badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.badges span{
+  font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:100px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:#cfc8e8;letter-spacing:.2px;
+}
+
+/* =========================================================
+   SIDE OPTIONS PANEL
+   ========================================================= */
+.panel{
+  background:rgba(255,255,255,.028);
+  border:1px solid var(--line);
+  border-radius:22px;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  overflow:hidden;
+  box-shadow:0 30px 70px -40px rgba(0,0,0,.9);
+}
+
+.panel-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.02);
+}
+.panel-title{
+  display:flex;align-items:center;gap:9px;
+  font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--muted);
+}
+.panel-title .live{
+  width:7px;height:7px;border-radius:50%;background:#34d399;
+  box-shadow:0 0 10px #34d399;animation:pulse 1.8s infinite;
+}
+
+.collapse-btn{
+  width:44px;height:44px;border-radius:13px;flex:none;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  cursor:pointer;transition:background .2s,border-color .2s,box-shadow .2s;
+}
+.collapse-btn span{
+  display:block;width:18px;height:2px;border-radius:2px;
+  background:var(--muted);transition:transform .3s,opacity .25s,background .2s;
+}
+.collapse-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(167,139,250,.45);box-shadow:0 0 22px -6px rgba(167,139,250,.8)}
+.collapse-btn:hover span{background:#fff}
+.panel.collapsed .collapse-btn span:nth-child(1){transform:translateY(7px) rotate(45deg);background:#fff}
+.panel.collapsed .collapse-btn span:nth-child(2){opacity:0}
+.panel.collapsed .collapse-btn span:nth-child(3){transform:translateY(-7px) rotate(-45deg);background:#fff}
+
+.panel-body{
+  max-height:1800px;opacity:1;overflow:hidden;
+  transition:max-height .45s ease,opacity .3s ease;
+}
+.panel.collapsed .panel-body{max-height:0;opacity:0}
+
+.tabs{
+  display:grid;grid-template-columns:repeat(7,1fr);gap:3px;
+  padding:6px;margin:16px 18px 4px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;
+}
+@media(max-width:520px){
+  .tabs{grid-template-columns:repeat(4,1fr);margin:14px 12px 4px}
+}
+.tab{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:9px 1px;border-radius:10px;border:none;background:transparent;
+  color:var(--muted);font-family:inherit;font-size:10px;font-weight:600;
+  letter-spacing:.1px;cursor:pointer;transition:.2s;white-space:nowrap;
+}
+.tab .ti{font-size:15px;line-height:1;filter:grayscale(.45);transition:.2s}
+.tab:hover{color:#fff;background:rgba(255,255,255,.055)}
+.tab.on{
+  color:#0a0814;font-weight:700;
+  background:linear-gradient(100deg,#a78bfa,#f472b6 55%,#22d3ee);
+  box-shadow:0 6px 18px -8px rgba(167,139,250,.9);
+}
+.tab.on .ti{filter:none}
+
+.tab-panes{
+  padding:4px 18px 20px;
+  max-height:640px;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.16) transparent;
+}
+.tab-panes::-webkit-scrollbar{width:6px}
+.tab-panes::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:10px}
+.tab-panes::-webkit-scrollbar-track{background:transparent}
+
+.tab-pane{display:none}
+.tab-pane.on{display:block;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+
+.field-label{
+  font-size:10.5px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;
+  color:var(--muted);margin:18px 0 10px;
+}
+.field-label:first-child{margin-top:10px}
+
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chips button{
+  font-family:inherit;font-size:12.5px;font-weight:500;cursor:pointer;
+  padding:7px 14px;border-radius:100px;color:var(--muted);
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  transition:.18s;
+}
+.chips button:hover{color:#fff;background:rgba(255,255,255,.09);transform:translateY(-1px)}
+.chips button.on{
+  color:#0a0814;font-weight:700;
+  background:linear-gradient(100deg,#a78bfa,#f472b6 55%,#22d3ee);
+  border-color:transparent;
+  box-shadow:0 6px 20px -8px rgba(167,139,250,.95);
+}
+
+.slider{display:block;margin-top:18px;font-size:12.5px;color:var(--muted);font-weight:500}
+.slider span{float:right;color:var(--text);font-weight:600;font-variant-numeric:tabular-nums}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:5px;margin-top:11px;
+  border-radius:100px;background:rgba(255,255,255,.12);outline:none;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:17px;height:17px;border-radius:50%;
+  background:linear-gradient(140deg,#a78bfa,#22d3ee);cursor:pointer;
+  box-shadow:0 0 12px rgba(167,139,250,.9);border:none;
+}
+input[type=range]::-moz-range-thumb{
+  width:17px;height:17px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(140deg,#a78bfa,#22d3ee);box-shadow:0 0 12px rgba(167,139,250,.9);
+}
+
+.colorrow{display:flex;gap:12px;flex-wrap:wrap}
+.colorrow label{
+  display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--muted);
+  font-weight:500;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:8px 13px;
+  cursor:pointer;flex:1;min-width:130px;transition:.2s;
+}
+.colorrow label:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)}
+input[type=color]{
+  -webkit-appearance:none;appearance:none;width:30px;height:30px;border:none;
+  border-radius:9px;background:none;cursor:pointer;padding:0;flex:none;
+}
+input[type=color]::-webkit-color-swatch-wrapper{padding:0}
+input[type=color]::-webkit-color-swatch{border:2px solid rgba(255,255,255,.35);border-radius:9px}
+input[type=color]::-moz-color-swatch{border:2px solid rgba(255,255,255,.35);border-radius:9px}
+
+.text-input{
+  width:100%;font-family:inherit;font-size:13.5px;font-weight:500;
+  padding:11px 14px;border-radius:12px;color:var(--text);
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);
+  outline:none;transition:.2s;
+}
+.text-input:focus{border-color:rgba(167,139,250,.65);background:rgba(255,255,255,.07);box-shadow:0 0 0 3px rgba(167,139,250,.12)}
+.text-input::placeholder{color:rgba(154,148,184,.6)}
+
+.toggle-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.09);border-radius:12px;
+  margin-bottom:8px;
+}
+.toggle-row span{font-size:13px;font-weight:600;color:var(--text)}
+.toggle{
+  width:42px;height:24px;border-radius:100px;flex:none;
+  background:rgba(255,255,255,.12);border:none;cursor:pointer;
+  position:relative;transition:.25s;
+}
+.toggle::after{
+  content:'';position:absolute;top:3px;left:3px;
+  width:18px;height:18px;border-radius:50%;background:#fff;
+  transition:.25s cubic-bezier(.2,.9,.3,1.2);
+  box-shadow:0 2px 6px rgba(0,0,0,.3);
+}
+.toggle.on{background:linear-gradient(100deg,#a78bfa,#22d3ee)}
+.toggle.on::after{transform:translateX(18px)}
+
+.upload{
+  display:flex;align-items:center;gap:9px;cursor:pointer;
+  font-size:13px;font-weight:600;padding:12px 16px;border-radius:14px;
+  margin-bottom:6px;color:var(--text);transition:.2s;
+  background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.18);
+}
+.upload:hover{background:rgba(255,255,255,.09);border-color:var(--a);transform:translateY(-1px)}
+.hint{font-size:12px;color:var(--muted);margin-top:16px;line-height:1.6;opacity:.85;font-weight:300}
+
+.vibe-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.vibe{
+  cursor:pointer;border:1px solid var(--line);border-radius:13px;overflow:hidden;
+  background:rgba(255,255,255,.028);transition:.22s;text-align:left;
+  font-family:inherit;padding:0;display:block;
+}
+.vibe:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.3);box-shadow:0 10px 24px -14px rgba(167,139,250,.9)}
+.vibe:active{transform:translateY(0)}
+.vibe .swatch{height:44px;position:relative;overflow:hidden}
+.vibe .swatch i{position:absolute;border-radius:50%;filter:blur(14px);opacity:.9}
+.vibe .label{padding:7px 10px 8px;font-size:11.5px;font-weight:600;color:var(--text);line-height:1.25}
+.vibe .label small{display:block;font-size:9.5px;color:var(--muted);font-weight:400;margin-top:1px}
+
+.save-row{display:flex;gap:8px;margin-bottom:12px}
+.save-row .text-input{flex:1}
+.save-btn{
+  padding:0 18px;border-radius:12px;border:none;cursor:pointer;
+  font-family:inherit;font-size:13px;font-weight:700;
+  background:linear-gradient(100deg,#a78bfa,#f472b6 55%,#22d3ee);
+  color:#0a0814;transition:.2s;flex:none;
+}
+.save-btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px -8px rgba(167,139,250,.9)}
+
+.saved-list{display:flex;flex-direction:column;gap:8px}
+.saved-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  transition:.2s;
+}
+.saved-item:hover{background:rgba(255,255,255,.075)}
+.saved-item .si-swatch{
+  width:34px;height:34px;border-radius:9px;flex:none;
+  background:linear-gradient(135deg,var(--a),var(--b));
+  box-shadow:0 0 14px -2px var(--a);
+}
+.saved-item .si-name{flex:1;font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.saved-item .si-load,.saved-item .si-del{
+  background:transparent;border:none;color:var(--muted);font-size:15px;
+  cursor:pointer;padding:4px 8px;border-radius:7px;transition:.2s;
+}
+.saved-item .si-load:hover{color:#fff;background:rgba(255,255,255,.1)}
+.saved-item .si-del:hover{color:#f87171;background:rgba(248,113,113,.12)}
+.empty-note{font-size:12.5px;color:var(--muted);text-align:center;padding:14px 0;font-weight:300;opacity:.75}
+
+.action-btn{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:13px 16px;margin-bottom:8px;border-radius:13px;
+  font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  color:var(--text);transition:.2s;text-align:left;
+}
+.action-btn:hover{background:rgba(255,255,255,.1);transform:translateY(-1px);border-color:rgba(167,139,250,.4)}
+.action-btn.primary{
+  background:linear-gradient(100deg,#a78bfa,#f472b6 55%,#22d3ee);
+  color:#0a0814;border-color:transparent;
+  box-shadow:0 10px 26px -12px rgba(167,139,250,.9);
+}
+.action-btn.primary:hover{box-shadow:0 14px 32px -12px rgba(244,114,182,.9)}
+
+.kbd-list{display:flex;flex-direction:column;gap:7px;margin-top:4px}
+.kbd-list div{
+  display:flex;align-items:center;gap:12px;
+  font-size:12.5px;color:var(--muted);font-weight:500;
+}
+kbd{
+  font-family:'Courier New',monospace;font-size:11px;font-weight:700;
+  min-width:26px;height:26px;padding:0 6px;display:inline-grid;place-items:center;
+  border-radius:7px;background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.14);
+  border-bottom-width:2px;color:#fff;
+}
+
+.panel-foot{
+  display:flex;gap:10px;padding:14px 18px;
+  border-top:1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.015);
+}
+.mini-btn{
+  flex:1;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;
+  padding:10px 14px;border-radius:100px;color:var(--text);text-align:center;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);
+  transition:.2s;
+}
+.mini-btn:hover{background:rgba(255,255,255,.11);transform:translateY(-1px)}
+
+/* =========================================================
+   FULLSCREEN MODAL
+   ========================================================= */
+.fs-modal{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(3,2,8,.85);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  display:none;align-items:center;justify-content:center;padding:24px;
+}
+.fs-modal.open{display:flex;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.fs-close{
+  position:absolute;top:22px;right:26px;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+  color:#fff;font-size:18px;cursor:pointer;transition:.2s;
+  display:grid;place-items:center;
+}
+.fs-close:hover{background:rgba(255,255,255,.16);transform:rotate(90deg)}
+.fs-wrapper{display:flex;align-items:center;justify-content:center;max-height:100%}
+
+/* ============ TOAST ============ */
+.toast{
+  position:fixed;bottom:30px;left:50%;
+  transform:translateX(-50%) translateY(24px);
+  background:linear-gradient(100deg,#a78bfa,#f472b6 55%,#22d3ee);
+  color:#0a0814;padding:13px 26px;border-radius:100px;
+  font-weight:700;font-size:14px;z-index:9999;
+  opacity:0;transition:all .32s cubic-bezier(.2,.9,.3,1.2);
+  box-shadow:0 14px 36px -10px rgba(167,139,250,.9);
+  pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ============ FEATURES ============ */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:18px}
+.feat{
+  background:rgba(255,255,255,.028);border:1px solid var(--line);
+  border-radius:20px;padding:28px 24px;transition:.28s;position:relative;overflow:hidden;
+}
+.feat::before{
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;
+  background:radial-gradient(400px 200px at 50% 0%,rgba(167,139,250,.16),transparent 70%);
+}
+.feat:hover{transform:translateY(-5px);border-color:rgba(167,139,250,.4)}
+.feat:hover::before{opacity:1}
+.feat .ico{
+  font-size:24px;width:50px;height:50px;display:grid;place-items:center;
+  border-radius:15px;margin-bottom:16px;
+  background:linear-gradient(140deg,rgba(167,139,250,.22),rgba(34,211,238,.14));
+  border:1px solid rgba(255,255,255,.09);
+}
+.feat h3{font-size:17px;font-weight:700;margin-bottom:8px;letter-spacing:-.2px}
+.feat p{font-size:14.2px;color:var(--muted);font-weight:300;line-height:1.65}
+
+/* ============ FORMATS ============ */
+.formats-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:18px}
+.fmt-card{
+  grid-column:span 2;
+  background:rgba(255,255,255,.028);border:1px solid var(--line);
+  border-radius:20px;padding:26px 24px;transition:.28s;position:relative;overflow:hidden;
+}
+.fmt-card:hover{
+  transform:translateY(-5px);border-color:rgba(167,139,250,.45);
+  background:rgba(255,255,255,.045);box-shadow:0 18px 40px -22px rgba(167,139,250,.6);
+}
+.fmt-card.wide{grid-column:span 3}
+.fmt-card .ico{
+  font-size:22px;width:46px;height:46px;display:grid;place-items:center;
+  border-radius:13px;margin-bottom:14px;
+  background:linear-gradient(140deg,rgba(167,139,250,.22),rgba(34,211,238,.14));
+  border:1px solid rgba(255,255,255,.09);
+}
+.fmt-card h3{font-size:16px;font-weight:700;margin-bottom:8px;letter-spacing:-.2px}
+.fmt-card p{font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.65}
+.spec-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:15px}
+.spec-pill{
+  font-size:10.5px;font-weight:700;letter-spacing:.4px;
+  padding:4px 10px;border-radius:100px;
+  background:rgba(167,139,250,.12);
+  border:1px solid rgba(167,139,250,.25);
+  color:#d6c9ff;white-space:nowrap;
+}
+.spec-pill.warn{
+  background:rgba(251,146,60,.12);
+  border-color:rgba(251,146,60,.32);
+  color:#fdba74;
+}
+@media(max-width:900px){
+  .formats-grid{grid-template-columns:repeat(2,1fr)}
+  .fmt-card,.fmt-card.wide{grid-column:span 1}
+}
+@media(max-width:560px){
+  .formats-grid{grid-template-columns:1fr}
+}
+
+/* ============ CTA / FOOTER ============ */
+.cta-box{
+  text-align:center;padding:70px 32px;border-radius:30px;
+  background:radial-gradient(120% 160% at 50% 0%,rgba(167,139,250,.16),rgba(34,211,238,.06) 45%,transparent 75%);
+  border:1px solid var(--line);
+}
+.cta-box h2{font-size:clamp(28px,4.4vw,46px);letter-spacing:-1.4px;font-weight:800;margin-bottom:14px}
+.cta-box p{color:var(--muted);max-width:540px;margin:0 auto 30px;font-weight:300}
+footer{
+  text-align:center;padding:44px 24px;color:var(--muted);font-size:13.5px;
+  border-top:1px solid var(--line);margin-top:40px;
+}
+footer b{color:#cfc8e8}
+
+/* =========================================================
+   CHAT WIDGET (REFINED)
+   ========================================================= */
+.chat-fab {
+  position: fixed; bottom: 28px; right: 28px;
+  width: 64px; height: 64px; border-radius: 50%; border: none; cursor: pointer;
+  background: linear-gradient(135deg, #a78bfa, #f472b6 55%, #22d3ee);
+  color: #0a0814; font-size: 26px;
+  display: grid; place-items: center;
+  box-shadow: 0 14px 38px -10px rgba(167,139,250,.9);
+  z-index: 400; transition: transform .22s cubic-bezier(.2,.9,.3,1.2), box-shadow .22s;
+  animation: chatPulse 3s ease-in-out infinite;
+}
+@keyframes chatPulse {
+  0%, 100% { box-shadow: 0 14px 38px -10px rgba(167,139,250,.9), 0 0 0 0 rgba(167,139,250,0.4); }
+  50% { box-shadow: 0 14px 44px -8px rgba(244,114,182,1), 0 0 0 10px rgba(167,139,250,0); }
+}
+.chat-fab:hover { transform: translateY(-3px) scale(1.05); }
+.chat-fab svg { width: 30px; height: 30px; fill: #0a0814; }
+
+.chat-badge {
+  position: absolute; top: -4px; right: -4px;
+  min-width: 24px; height: 24px; padding: 0 6px;
+  border-radius: 100px; background: #ef4444; color: #fff;
+  font-size: 11px; font-weight: 800;
+  display: grid; place-items: center;
+  border: 2px solid #07060f;
+  box-shadow: 0 4px 10px rgba(0,0,0,.5);
+  transition: transform .2s;
+}
+
+/* Teaser Bubble */
+.chat-teaser {
+  position: fixed; bottom: 40px; right: 100px;
+  background: #fff; color: #0a0814;
+  padding: 12px 18px; border-radius: 20px; border-bottom-right-radius: 4px;
+  font-size: 13.5px; font-weight: 600;
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,.5);
+  z-index: 399; cursor: pointer;
+  opacity: 0; transform: translateX(10px) scale(0.9); pointer-events: none;
+  transition: all .3s cubic-bezier(.2,.9,.3,1.2);
+  white-space: nowrap;
+}
+.chat-teaser.show { opacity: 1; transform: translateX(0) scale(1); pointer-events: auto; }
+.chat-teaser::after {
+  content: ''; position: absolute; bottom: 0; right: -6px;
+  width: 12px; height: 12px; background: #fff;
+  clip-path: polygon(0 0, 0% 100%, 100% 100%);
+}
+.chat-teaser:hover { background: #f8f8fc; transform: translateY(-2px); }
+
+/* Chat Panel */
+.chat-panel {
+  position: fixed; bottom: 104px; right: 28px;
+  width: 390px; max-width: calc(100vw - 32px);
+  height: 600px; max-height: calc(100vh - 140px);
+  background: rgba(16,12,28,.98);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 24px;
+  display: flex; flex-direction: column; overflow: hidden;
+  box-shadow: 0 30px 80px -20px rgba(0,0,0,.9), 0 0 40px -10px rgba(167,139,250,.3) inset;
+  z-index: 401; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  transform: translateY(20px) scale(.96); opacity: 0; pointer-events: none;
+  transition: transform .35s cubic-bezier(.2,.9,.3,1.1), opacity .3s;
+}
+.chat-panel.open { transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
+
+.chat-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  background: linear-gradient(180deg, rgba(255,255,255,.04), transparent);
+}
+.chat-header-icon {
+  width: 38px; height: 38px; border-radius: 12px;
+  background: linear-gradient(135deg, #a78bfa, #22d3ee);
+  display: grid; place-items: center;
+  font-size: 18px; color: #0a0814; font-weight: 800;
+  box-shadow: 0 4px 12px -4px rgba(167,139,250,.6);
+}
+.chat-title-area { flex: 1; display: flex; flex-direction: column; }
+.chat-title { font-size: 15px; font-weight: 700; letter-spacing: .2px; line-height: 1.2; }
+.chat-status { font-size: 11px; color: #34d399; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+.chat-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #34d399; box-shadow: 0 0 6px #34d399; }
+
+.chat-icon-btn {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+  color: var(--muted); font-size: 16px; cursor: pointer;
+  display: grid; place-items: center; transition: .2s; font-family: inherit;
+}
+.chat-icon-btn:hover { background: rgba(255,255,255,.12); color: #fff; }
+
+.chat-views { flex: 1; display: flex; flex-direction: column; min-height: 0; position: relative; }
+.chat-view { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.chat-view[hidden] { display: none; }
+
+/* List View */
+.chat-list-view { overflow-y: auto; padding: 12px; }
+.chat-add-row {
+  width: 100%; display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; border-radius: 16px;
+  background: linear-gradient(100deg, rgba(167,139,250,.15), rgba(34,211,238,.08));
+  border: 1px dashed rgba(167,139,250,.4);
+  color: var(--text); font-family: inherit; font-size: 13.5px; font-weight: 600;
+  cursor: pointer; transition: .2s; margin-bottom: 12px;
+}
+.chat-add-row:hover { background: linear-gradient(100deg, rgba(167,139,250,.25), rgba(34,211,238,.15)); border-color: rgba(167,139,250,.7); transform: translateY(-1px); }
+.chat-add-plus {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, #a78bfa, #22d3ee);
+  color: #0a0814; display: grid; place-items: center;
+  font-size: 18px; font-weight: 800; flex: none;
+  box-shadow: 0 4px 10px -2px rgba(167,139,250,.6);
+}
+
+.chat-contacts { display: flex; flex-direction: column; gap: 4px; }
+.chat-contact {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border-radius: 16px; cursor: pointer;
+  transition: .2s; background: transparent; border: 1px solid transparent;
+  font-family: inherit; text-align: left; color: var(--text); width: 100%;
+}
+.chat-contact:hover { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.05); }
+.chat-contact .avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 16px; font-weight: 800;
+  color: #0a0814; flex: none;
+  box-shadow: 0 4px 10px -4px rgba(0,0,0,.5);
+}
+.chat-contact .info { flex: 1; min-width: 0; }
+.chat-contact .info .name { font-size: 14px; font-weight: 700; color: var(--text); }
+.chat-contact .info .preview {
+  font-size: 12px; color: var(--muted); margin-top: 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.chat-contact .meta { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex: none; }
+.chat-contact .time { font-size: 10.5px; color: var(--muted); font-weight: 500; }
+.chat-contact .unread {
+  min-width: 20px; height: 20px; padding: 0 6px; border-radius: 100px;
+  background: linear-gradient(135deg, #a78bfa, #f472b6);
+  color: #0a0814; font-size: 11px; font-weight: 800;
+  display: grid; place-items: center;
+}
+.chat-contact .del {
+  background: transparent; border: none; color: var(--muted); font-size: 14px;
+  cursor: pointer; padding: 6px; border-radius: 8px; opacity: 0; transition: .2s;
+}
+.chat-contact:hover .del { opacity: 1; }
+.chat-contact .del:hover { color: #f87171; background: rgba(248,113,113,.12); }
+
+.chat-empty {
+  font-size: 13px; color: var(--muted);
+  text-align: center; padding: 40px 20px; font-weight: 400; line-height: 1.6;
+}
+.chat-empty span { display: block; font-size: 32px; margin-bottom: 12px; opacity: .8; }
+.chat-empty small { display: block; font-size: 11px; opacity: .6; margin-top: 8px; }
+
+/* Conversation View */
+.chat-conv-view { padding: 0; background: radial-gradient(circle at top right, rgba(167,139,250,.05), transparent 50%); }
+.chat-messages {
+  flex: 1; overflow-y: auto; padding: 16px 16px 10px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.chat-msg {
+  max-width: 80%; padding: 10px 16px; border-radius: 18px;
+  font-size: 13.5px; line-height: 1.5; word-wrap: break-word;
+  position: relative; animation: msgIn .25s cubic-bezier(.2,.9,.3,1.1);
+  box-shadow: 0 4px 15px -5px rgba(0,0,0,.3);
+}
+@keyframes msgIn { from { opacity: 0; transform: translateY(10px) scale(.95); } to { opacity: 1; transform: none; } }
+.chat-msg.sent {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #a78bfa, #7c3aed);
+  color: #fff; border-bottom-right-radius: 4px;
+}
+.chat-msg.received {
+  align-self: flex-start;
+  background: rgba(255,255,255,.08);
+  color: var(--text); border-bottom-left-radius: 4px;
+  border: 1px solid rgba(255,255,255,.05);
+}
+.chat-msg .ts { display: block; font-size: 10px; opacity: .6; margin-top: 4px; text-align: right; font-weight: 500; }
+
+.chat-system {
+  align-self: center; font-size: 12px; color: var(--muted);
+  background: rgba(255,255,255,.05); padding: 6px 16px;
+  border-radius: 100px; font-weight: 500; border: 1px solid rgba(255,255,255,.05);
+}
+
+.chat-form {
+  display: flex; gap: 10px; padding: 12px 16px 16px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  background: rgba(16,12,28,.9);
+}
+.chat-input {
+  flex: 1; padding: 12px 18px; border-radius: 100px;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+  color: var(--text); font-family: inherit; font-size: 14px;
+  outline: none; transition: .2s;
+}
+.chat-input:focus { border-color: rgba(167,139,250,.6); background: rgba(255,255,255,.09); box-shadow: 0 0 0 3px rgba(167,139,250,.15); }
+.chat-send {
+  padding: 0 20px; border-radius: 100px; border: none;
+  background: linear-gradient(135deg, #a78bfa, #f472b6 55%, #22d3ee);
+  color: #0a0814; font-family: inherit; font-size: 14px; font-weight: 800;
+  cursor: pointer; transition: .2s;
+}
+.chat-send:hover { transform: translateY(-1px); box-shadow: 0 8px 20px -8px rgba(167,139,250,.9); }
+
+/* Add Contact Modal */
+.chat-modal {
+  position: fixed; inset: 0; z-index: 600;
+  background: rgba(3,2,8,.7);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  display: none; align-items: center; justify-content: center; padding: 24px;
+}
+.chat-modal.open { display: flex; animation: fadeIn .2s ease; }
+.chat-modal-card {
+  width: 360px; max-width: 100%;
+  background: #14101f;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 24px; padding: 28px;
+  box-shadow: 0 30px 70px -20px rgba(0,0,0,.9);
+}
+.chat-modal-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.chat-modal-card p { font-size: 13px; color: var(--muted); margin-bottom: 18px; font-weight: 400; line-height: 1.5; }
+.chat-modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+.chat-modal-actions .mini-btn { flex: 1; padding: 12px 0; }
+.chat-modal-actions .save-btn { flex: 1; padding: 12px 0; border-radius: 100px; }
+
+@media(max-width:520px){
+  .chat-panel { bottom: 90px; right: 12px; left: 12px; width: auto; max-width: none; height: calc(100vh - 120px); }
+  .chat-fab { bottom: 20px; right: 20px; width: 56px; height: 56px; }
+  .chat-fab svg { width: 26px; height: 26px; }
+  .chat-teaser { bottom: 32px; right: 86px; font-size: 12.5px; padding: 10px 14px; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-stars"></div>
+<div class="bg-aurora"><i></i><i></i><i></i></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="logo"><span class="moon"></span>Vespera</div>
+  <div class="nav-links">
+    <a href="#studio">Studio</a>
+    <a href="#features">Features</a>
+    <a href="#formats">Formats</a>
+    <a href="#studio" data-open-tab="vibes">Vibes</a>
+    <a href="#studio" class="btn primary">Try it free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="pill">✨ 100% free · no account needed</div>
+  <h1>Your Profile,<br><span class="grad">Your World.</span></h1>
+  <p class="sub">
+    Vespera is a free profile-customization and social design studio where creativity
+    meets self-expression. Build a profile that feels uniquely yours — no premium
+    cosmetics, no sign-up walls, no limits on imagination.
+  </p>
+  <div class="hero-cta">
+    <a href="#studio" class="btn primary">Open the Studio</a>
+    <a href="#features" class="btn ghost">Explore features</a>
+  </div>
+</header>
+
+<!-- STUDIO -->
+<section id="studio">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Customization <span class="grad">Studio</span></h2>
+      <p>Everything below is live. Tweak a control, watch the card react instantly.</p>
+    </div>
+
+    <div class="studio-grid">
+
+      <!-- PREVIEW -->
+      <div class="preview-col">
+        <div class="preview-tag"><span class="live"></span> Live preview</div>
+
+        <div class="profile-card" id="card">
+          <canvas id="fx"></canvas>
+
+          <div class="banner b-aurora" id="banner">
+            <img class="banner-img" id="bannerImg" alt="">
+            <div class="banner-layer b1"></div>
+            <div class="banner-layer b2"></div>
+            <div class="banner-layer b3"></div>
+          </div>
+
+          <div class="card-body">
+            <div class="avatar-outer" id="avatarOuter">
+              <div class="frame-deco" id="frameDeco"></div>
+              <div class="orbit" id="orbit"></div>
+              <div class="wing l"></div>
+              <div class="wing r"></div>
+              <div class="halo"></div>
+              <div class="avatar-shape" id="avatarShape">
+                <img id="avatarImg" alt="avatar">
+              </div>
+            </div>
+
+            <div class="p-name" id="pName">Vespera</div>
+            <div class="p-handle" id="pHandle">@stardust · dreaming in neon</div>
+            <div class="badges" id="pBadges"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDE PANEL -->
+      <div class="panel" id="panel">
+
+        <div class="panel-head">
+          <div class="panel-title"><span class="live"></span> Studio Options</div>
+          <button class="collapse-btn" id="collapseBtn" aria-label="Toggle options" aria-expanded="true">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+
+        <div class="panel-body" id="panelBody">
+
+          <div class="tabs" id="tabs" role="tablist">
+            <button class="tab on" data-tab="avatar"  role="tab"><span class="ti">👤</span>Avatar</button>
+            <button class="tab"    data-tab="effects" role="tab"><span class="ti">✨</span>Effects</button>
+            <button class="tab"    data-tab="banner"  role="tab"><span class="ti">🌌</span>Banner</button>
+            <button class="tab"    data-tab="style"   role="tab"><span class="ti">🎨</span>Style</button>
+            <button class="tab"    data-tab="profile" role="tab"><span class="ti">📝</span>Profile</button>
+            <button class="tab"    data-tab="vibes"   role="tab"><span class="ti">🪄</span>Vibes</button>
+            <button class="tab"    data-tab="share"   role="tab"><span class="ti">🔗</span>Share</button>
+          </div>
+
+          <div class="tab-panes">
+            <!-- AVATAR, EFFECTS, BANNER, STYLE, PROFILE, VIBES, SHARE TABS OMITTED FOR BREVITY (identical to previous version) -->
+            <!-- ... (Keep all the existing tab content here) ... -->
+            
+            <!-- AVATAR -->
+            <div class="tab-pane on" data-pane="avatar">
+              <div class="field-label">Avatar shape</div>
+              <div class="chips" id="shapeChips">
+                <button data-shape="circle" class="on">Circle</button>
+                <button data-shape="rounded">Rounded</button>
+                <button data-shape="square">Square</button>
+                <button data-shape="heart">Heart</button>
+                <button data-shape="star">Star</button>
+                <button data-shape="diamond">Diamond</button>
+                <button data-shape="hexagon">Hexagon</button>
+                <button data-shape="shield">Shield</button>
+                <button data-shape="flower">Flower</button>
+              </div>
+
+              <div class="field-label">Avatar frame</div>
+              <div class="chips" id="frameChips">
+                <button data-frame="none" class="on">None</button>
+                <button data-frame="neon">Neon</button>
+                <button data-frame="glow">Glow</button>
+                <button data-frame="celestial">Celestial</button>
+                <button data-frame="roses">Roses</button>
+                <button data-frame="crystal">Crystal</button>
+                <button data-frame="thorns">Thorns</button>
+                <button data-frame="stars">Stars</button>
+                <button data-frame="wings">Wings</button>
+                <button data-frame="halo">Halo</button>
+                <button data-frame="butterfly">Butterfly</button>
+                <button data-frame="vines">Vines</button>
+              </div>
+
+              <label class="slider">Avatar size <span id="avatarSizeVal">150px</span>
+                <input type="range" id="avatarSize" min="90" max="220" value="150">
+              </label>
+
+              <div class="field-label" style="margin-top:22px">Upload avatar</div>
+              <label class="upload">⬆ Choose image
+                <input type="file" id="avatarFile" accept="image/png,image/jpeg,image/gif" hidden>
+              </label>
+              <p class="hint">PNG, JPG, or animated GIF.</p>
+            </div>
+
+            <!-- EFFECTS -->
+            <div class="tab-pane" data-pane="effects">
+              <div class="field-label">Animated effect</div>
+              <div class="chips" id="effectChips">
+                <button data-effect="none">None</button>
+                <button data-effect="stars" class="on">Stars</button>
+                <button data-effect="fireflies">Fireflies</button>
+                <button data-effect="petals">Petals</button>
+                <button data-effect="bubbles">Bubbles</button>
+                <button data-effect="embers">Embers</button>
+                <button data-effect="sparkles">Sparkles</button>
+                <button data-effect="rain">Rain</button>
+                <button data-effect="snow">Snow</button>
+                <button data-effect="meteor">Meteors</button>
+                <button data-effect="hearts">Hearts</button>
+              </div>
+
+              <label class="slider">Particle density <span id="densityVal">50</span>
+                <input type="range" id="density" min="0" max="140" value="50">
+              </label>
+              <label class="slider">Animation speed <span id="speedVal">1.0×</span>
+                <input type="range" id="speed" min="0.2" max="3" step="0.1" value="1">
+              </label>
+            </div>
+
+            <!-- BANNER -->
+            <div class="tab-pane" data-pane="banner">
+              <div class="field-label">Banner style</div>
+              <div class="chips" id="bannerChips">
+                <button data-banner="aurora" class="on">Aurora</button>
+                <button data-banner="mist">Mist</button>
+                <button data-banner="ocean">Ocean</button>
+                <button data-banner="rain">Rain</button>
+                <button data-banner="blossom">Blossom</button>
+                <button data-banner="gradient">Gradient</button>
+                <button data-banner="cosmos">Cosmos</button>
+              </div>
+
+              <label class="slider">Banner height <span id="bannerHeightVal">132px</span>
+                <input type="range" id="bannerHeight" min="70" max="220" value="132">
+              </label>
+
+              <div class="field-label" style="margin-top:22px">Upload banner image</div>
+              <label class="upload">⬆ Choose image
+                <input type="file" id="bannerFile" accept="image/png,image/jpeg,image/gif" hidden>
+              </label>
+              <p class="hint">PNG, JPG, or animated GIF — under 10 MB, minimum 680 × 240 px.</p>
+            </div>
+
+            <!-- STYLE -->
+            <div class="tab-pane" data-pane="style">
+              <div class="field-label">Colors</div>
+              <div class="colorrow">
+                <label>Accent <input type="color" id="accent" value="#a78bfa"></label>
+                <label>Secondary <input type="color" id="accent2" value="#22d3ee"></label>
+              </div>
+
+              <div class="field-label">Card background</div>
+              <div class="colorrow">
+                <label>Card bg <input type="color" id="cardBg" value="#100c1c"></label>
+              </div>
+
+              <label class="slider">Glow intensity <span id="glowVal">1.0</span>
+                <input type="range" id="glow" min="0" max="2.5" step="0.1" value="1">
+              </label>
+              <label class="slider">Card width <span id="widthVal">380px</span>
+                <input type="range" id="width" min="300" max="460" value="380">
+              </label>
+              <label class="slider">Corner radius <span id="radiusVal">24px</span>
+                <input type="range" id="radius" min="0" max="48" value="24">
+              </label>
+            </div>
+
+            <!-- PROFILE -->
+            <div class="tab-pane" data-pane="profile">
+              <div class="field-label">Display name</div>
+              <input type="text" id="nameInput" class="text-input" value="Vespera" maxlength="24" placeholder="Your name...">
+
+              <div class="field-label">Handle / subtitle</div>
+              <input type="text" id="handleInput" class="text-input" value="@stardust · dreaming in neon" maxlength="48" placeholder="@handle · tagline">
+
+              <div class="field-label">Badges (comma separated)</div>
+              <input type="text" id="badgesInput" class="text-input" value="✦ Celestial, ♡ Dreamer, 🌙 Night Owl" maxlength="90" placeholder="Badge 1, Badge 2, Badge 3">
+
+              <div class="toggle-row" style="margin-top:12px">
+                <span>Show badges</span>
+                <button class="toggle on" id="showBadgesToggle" aria-label="Toggle badges"></button>
+              </div>
+
+              <div class="field-label">Name font</div>
+              <div class="chips" id="fontChips">
+                <button data-font="outfit" class="on">Outfit</button>
+                <button data-font="serif">Serif</button>
+                <button data-font="mono">Mono</button>
+                <button data-font="cursive">Cursive</button>
+              </div>
+
+              <label class="slider">Name size <span id="nameSizeVal">23px</span>
+                <input type="range" id="nameSize" min="14" max="40" value="23">
+              </label>
+
+              <div class="field-label">Text colors</div>
+              <div class="colorrow">
+                <label>Name <input type="color" id="nameColor" value="#ece9f7"></label>
+                <label>Handle <input type="color" id="handleColor" value="#9a94b8"></label>
+              </div>
+
+              <p class="hint">Everything you change here appears live on the profile card to the left.</p>
+            </div>
+
+            <!-- VIBES -->
+            <div class="tab-pane" data-pane="vibes">
+              <div class="field-label">Preset vibes</div>
+              <div class="vibe-grid">
+                <button class="vibe" data-preset="celestial">
+                  <div class="swatch" style="background:#0b0820">
+                    <i style="width:70px;height:70px;background:#a78bfa;top:-16px;left:-8px"></i>
+                    <i style="width:56px;height:56px;background:#22d3ee;top:8px;right:-6px"></i>
+                  </div>
+                  <div class="label">Celestial<small>Moons · stars · aurora</small></div>
+                </button>
+                <button class="vibe" data-preset="gothic">
+                  <div class="swatch" style="background:#120309">
+                    <i style="width:70px;height:70px;background:#ef4444;top:-18px;left:12px"></i>
+                    <i style="width:56px;height:56px;background:#7c3aed;bottom:-18px;right:6px"></i>
+                  </div>
+                  <div class="label">Gothic<small>Thorns · embers · mist</small></div>
+                </button>
+                <button class="vibe" data-preset="pastel">
+                  <div class="swatch" style="background:#1d1522">
+                    <i style="width:70px;height:70px;background:#f9a8d4;top:-16px;left:-6px"></i>
+                    <i style="width:56px;height:56px;background:#a7f3d0;bottom:-16px;right:0"></i>
+                  </div>
+                  <div class="label">Pastel Dream<small>Petals · roses · blossom</small></div>
+                </button>
+                <button class="vibe" data-preset="cyber">
+                  <div class="swatch" style="background:#040a14">
+                    <i style="width:70px;height:70px;background:#22d3ee;top:-18px;left:6px"></i>
+                    <i style="width:56px;height:56px;background:#f0abfc;bottom:-16px;right:-6px"></i>
+                  </div>
+                  <div class="label">Cyberpunk<small>Neon · sparks · rain</small></div>
+                </button>
+                <button class="vibe" data-preset="floral">
+                  <div class="swatch" style="background:#1a0a10">
+                    <i style="width:70px;height:70px;background:#fb7185;top:-16px;left:0"></i>
+                    <i style="width:56px;height:56px;background:#86efac;bottom:-18px;right:6px"></i>
+                  </div>
+                  <div class="label">Romantic Floral<small>Flower · roses · petals</small></div>
+                </button>
+                <button class="vibe" data-preset="rainbow">
+                  <div class="swatch" style="background:linear-gradient(120deg,#f472b6,#38bdf8,#facc15)">
+                    <i style="width:64px;height:64px;background:#fff;opacity:.28;top:-14px;left:12px"></i>
+                  </div>
+                  <div class="label">Chaos Rainbow<small>Stars · bubbles · gradient</small></div>
+                </button>
+              </div>
+
+              <div class="field-label" style="margin-top:22px">Save current look</div>
+              <div class="save-row">
+                <input type="text" id="saveName" class="text-input" placeholder="Name this look..." maxlength="20">
+                <button class="save-btn" id="saveBtn">Save</button>
+              </div>
+
+              <div class="field-label">Your saved presets</div>
+              <div class="saved-list" id="savedList">
+                <p class="empty-note">No saved presets yet. Tune your card, then save it above.</p>
+              </div>
+            </div>
+
+            <!-- SHARE -->
+            <div class="tab-pane" data-pane="share">
+              <div class="field-label">Share your creation</div>
+              <button class="action-btn primary" id="shareBtn">🔗 Copy shareable link</button>
+              <button class="action-btn" id="copyConfigBtn">📋 Copy config (JSON)</button>
+              <button class="action-btn" id="fullscreenBtn">⛶ Fullscreen preview</button>
+
+              <div class="field-label" style="margin-top:22px">Keyboard shortcuts</div>
+              <div class="kbd-list">
+                <div><kbd>R</kbd> Randomize everything</div>
+                <div><kbd>X</kbd> Reset to default</div>
+                <div><kbd>V</kbd> Toggle options panel</div>
+                <div><kbd>F</kbd> Fullscreen preview</div>
+                <div><kbd>S</kbd> Open Save preset field</div>
+              </div>
+
+              <p class="hint">Shareable links encode your colors, frames, effects, banner, and text — but not uploaded images.</p>
+            </div>
+
+          </div>
+
+          <div class="panel-foot">
+            <button class="mini-btn" id="randomize">🎲 Surprise me</button>
+            <button class="mini-btn" id="reset">↺ Reset</button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Make Your Profile <span class="grad">Unforgettable</span></h2>
+      <p>An extensive collection of customization options — all free, all unlocked.</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat">
+        <div class="ico">💫</div>
+        <h3>Animated Avatar Frames</h3>
+        <p>Celestial rings, glowing neon borders, wings, roses, crystals, thorns, orbiting moons and magical effects.</p>
+      </div>
+      <div class="feat">
+        <div class="ico">🔷</div>
+        <h3>Custom Avatar Shapes</h3>
+        <p>Circles, squares, rounded squares, hearts, stars, diamonds, hexagons, shields, flowers and more silhouettes.</p>
+      </div>
+      <div class="feat">
+        <div class="ico">🌠</div>
+        <h3>Animated Effects</h3>
+        <p>Floating particles, shooting stars, fireflies, falling petals, bubbles, embers, sparkles and glowing auras.</p>
+      </div>
+      <div class="feat">
+        <div class="ico">🌌</div>
+        <h3>Beautiful Banners</h3>
+        <p>Auroras, mist, ocean waves, magical rain, blossoms, animated gradients and dreamy landscapes.</p>
+      </div>
+      <div class="feat">
+        <div class="ico">🎨</div>
+        <h3>Advanced Colors</h3>
+        <p>Multicolor gradients, custom palettes, border colors, transparency, glow intensity and vibrant lighting.</p>
+      </div>
+      <div class="feat">
+        <div class="ico">🧩</div>
+        <h3>Personalized Layouts</h3>
+        <p>Adjust profile cards, avatar placement, nameplates, badges, banner dimensions and decorative elements.</p>
+      </div>
+      <div class="feat">
+        <div class="ico">🎚️</div>
+        <h3>Fine-Grained Control</h3>
+        <p>Animation speed, direction, intensity, particle quantity, glow strength and looping behaviour — all yours.</p>
+      </div>
+      <div class="feat">
+        <div class="ico">📁</div>
+        <h3>Your Own Images</h3>
+        <p>Upload PNG, JPG or animated GIF images, fine-tune their positioning and preview before applying.</p>
+      </div>
+      <div class="feat">
+        <div class="ico">💬</div>
+        <h3>Local Messages</h3>
+        <p>Add contacts by username and chat locally. Messages persist in your browser across visits.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMATS -->
+<section id="formats">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Formats & <span class="grad">Technologies</span></h2>
+      <p>Everything you need to know about what Vespera supports under the hood.</p>
+    </div>
+
+    <div class="formats-grid">
+      <div class="fmt-card">
+        <div class="ico">🖼️</div>
+        <h3>Avatars</h3>
+        <p>Support PNG, JPG, or animated GIF files — drop in a still portrait or a looping animation.</p>
+        <div class="spec-pills">
+          <span class="spec-pill">PNG</span>
+          <span class="spec-pill">JPG</span>
+          <span class="spec-pill">GIF</span>
+        </div>
+      </div>
+
+      <div class="fmt-card">
+        <div class="ico">🎞️</div>
+        <h3>Profile Banners</h3>
+        <p>Upload animated or static banner images with generous size limits for crisp, wide headers.</p>
+        <div class="spec-pills">
+          <span class="spec-pill">PNG</span>
+          <span class="spec-pill">JPG</span>
+          <span class="spec-pill">GIF</span>
+          <span class="spec-pill warn">&lt; 10 MB</span>
+          <span class="spec-pill">min 680 × 240 px</span>
+        </div>
+      </div>
+
+      <div class="fmt-card">
+        <div class="ico">🎨</div>
+        <h3>Profile Themes & Colors</h3>
+        <p>Custom primary and accent gradient color pickers put full palette control in your hands.</p>
+        <div class="spec-pills">
+          <span class="spec-pill">Gradient</span>
+          <span class="spec-pill">Custom hex</span>
+          <span class="spec-pill">Live preview</span>
+        </div>
+      </div>
+
+      <div class="fmt-card wide">
+        <div class="ico">✨</div>
+        <h3>Shop Decorations & Effects</h3>
+        <p>Interactive animations — such as avatar frames and profile effects — are built using lightweight vector runtimes like Rive or Lottie formats for smooth performance across desktop and mobile clients.</p>
+        <div class="spec-pills">
+          <span class="spec-pill">Rive</span>
+          <span class="spec-pill">Lottie</span>
+          <span class="spec-pill">Lightweight vector runtimes</span>
+          <span class="spec-pill">Desktop + mobile</span>
+        </div>
+      </div>
+
+      <div class="fmt-card wide">
+        <div class="ico">🛠️</div>
+        <h3>Creation Software</h3>
+        <p>Creators and designers typically build custom Discord motion graphics and assets using Adobe After Effects, Figma, or vector tools.</p>
+        <div class="spec-pills">
+          <span class="spec-pill">Adobe After Effects</span>
+          <span class="spec-pill">Figma</span>
+          <span class="spec-pill">Vector tools</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="wrap">
+    <div class="cta-box">
+      <h2>Design your identity.<br><span class="grad">Create your atmosphere.</span></h2>
+      <p>Vespera makes advanced profile design accessible and enjoyable — live previews, an intuitive editor, and zero paywalls.</p>
+      <a href="#studio" class="btn primary">Start designing — it's free</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <b>Vespera</b> · Design your identity. Create your atmosphere. Make your profile feel like you. 🌌
+</footer>
+
+<!-- =========================================================
+     CHAT WIDGET
+     ========================================================= -->
+<div class="chat-teaser" id="chatTeaser">
+  Chat with Vespera ✨
+</div>
+
+<button class="chat-fab" id="chatFab" aria-label="Open messages">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 2H4C2.9 2 2 2.9 2 4v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+  </svg>
+  <span class="chat-badge" id="chatBadge" hidden>0</span>
+</button>
+
+<aside class="chat-panel" id="chatPanel" aria-hidden="true" aria-label="Messages">
+  <header class="chat-header">
+    <button class="chat-icon-btn" id="chatBackBtn" hidden aria-label="Back">←</button>
+    <div class="chat-header-icon" id="chatHeaderIcon">V</div>
+    <div class="chat-title-area">
+      <div class="chat-title" id="chatTitle">Messages</div>
+      <div class="chat-status" id="chatStatus">Active now</div>
+    </div>
+    <button class="chat-icon-btn" id="chatCloseBtn" aria-label="Close">✕</button>
+  </header>
+
+  <div class="chat-views">
+    <section class="chat-view chat-list-view" id="chatListView">
+      <button class="chat-add-row" id="chatAddRow">
+        <span class="chat-add-plus">+</span>
+        <span>Add contact by username</span>
+      </button>
+      <div class="chat-contacts" id="chatContacts"></div>
+    </section>
+
+    <section class="chat-view chat-conv-view" id="chatConvView" hidden>
+      <div class="chat-messages" id="chatMessages"></div>
+      <form class="chat-form" id="chatForm">
+        <input class="chat-input" id="chatInput" type="text" placeholder="Write a message..." maxlength="500" autocomplete="off">
+        <button class="chat-send" type="submit">Send</button>
+      </form>
+    </section>
+  </div>
+</aside>
+
+<!-- Add contact modal -->
+<div class="chat-modal" id="chatModal">
+  <div class="chat-modal-card">
+    <h3>Add a contact</h3>
+    <p>Enter a username to start a conversation. Messages are stored locally on this device.</p>
+    <input class="text-input" id="chatUsername" type="text" placeholder="@username" maxlength="32" autocomplete="off">
+    <div class="chat-modal-actions">
+      <button class="mini-btn" id="chatCancelBtn">Cancel</button>
+      <button class="save-btn" id="chatConfirmBtn">Add contact</button>
+    </div>
+  </div>
+</div>
+
+<!-- FULLSCREEN MODAL -->
+<div class="fs-modal" id="fsModal">
+  <button class="fs-close" id="fsClose">✕</button>
+  <div class="fs-wrapper" id="fsWrapper"></div>
+</div>
+
+<script>
+/* =========================================================
+   STATE
+   ========================================================= */
+const state = {
+  shape: 'circle',
+  frame: 'none',
+  effect: 'stars',
+  banner: 'aurora',
+  density: 50,
+  speed: 1,
+  accent: '#a78bfa',
+  accent2: '#22d3ee',
+  cardBg: '#100c1c',
+  glow: 1,
+  width: 380,
+  radius: 24,
+  avatarSize: 150,
+  bannerHeight: 132,
+  name: 'Vespera',
+  handle: '@stardust · dreaming in neon',
+  badges: ['✦ Celestial', '♡ Dreamer', '🌙 Night Owl'],
+  fontStyle: 'outfit',
+  nameSize: 23,
+  nameColor: '#ece9f7',
+  handleColor: '#9a94b8',
+  showBadges: true
+};
+
+const FONTS = {
+  outfit:  "'Outfit', system-ui, sans-serif",
+  serif:   "Georgia, 'Times New Roman', serif",
+  mono:    "'Courier New', ui-monospace, monospace",
+  cursive: "'Brush Script MT', 'Segoe Script', cursive"
+};
+
+/* =========================================================
+   DOM
+   ========================================================= */
+const card        = document.getElementById('card');
+const avatarOuter = document.getElementById('avatarOuter');
+const avatarShape = document.getElementById('avatarShape');
+const frameDeco   = document.getElementById('frameDeco');
+const orbit       = document.getElementById('orbit');
+const banner      = document.getElementById('banner');
+const avatarImg   = document.getElementById('avatarImg');
+const bannerImg   = document.getElementById('bannerImg');
+const canvas      = document.getElementById('fx');
+const ctx         = canvas.getContext('2d');
+const panel       = document.getElementById('panel');
+const pName       = document.getElementById('pName');
+const pHandle     = document.getElementById('pHandle');
+const pBadges     = document.getElementById('pBadges');
+
+/* =========================================================
+   DEFAULT AVATAR
+   ========================================================= */
+const DEFAULT_AVATAR =
+  'data:image/svg+xml;utf8,' + encodeURIComponent(`
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+    <defs>
+      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#a78bfa"/>
+        <stop offset="50%" stop-color="#f472b6"/>
+        <stop offset="100%" stop-color="#22d3ee"/>
+      </linearGradient>
+      <radialGradient id="glow" cx="50%" cy="40%" r="60%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <rect width="200" height="200" fill="url(#g)"/>
+    <rect width="200" height="200" fill="url(#glow)"/>
+    <circle cx="104" cy="96" r="46" fill="#ffffff" opacity="0.95"/>
+    <circle cx="126" cy="82" r="40" fill="url(#g)"/>
+    <circle cx="62" cy="52" r="2.6" fill="#fff"/>
+    <circle cx="148" cy="146" r="2.2" fill="#fff"/>
+    <circle cx="52" cy="140" r="1.8" fill="#fff"/>
+    <circle cx="160" cy="46" r="1.6" fill="#fff"/>
+  </svg>`);
+avatarImg.src = DEFAULT_AVATAR;
+
+/* =========================================================
+   SHAPES
+   ========================================================= */
+const SHAPES = {
+  circle:  'circle(50% at 50% 50%)',
+  square:  'inset(0)',
+  rounded: 'inset(0 round 24%)',
+  heart:   'polygon(50% 100%, 8% 58%, 0% 38%, 2% 20%, 14% 6%, 30% 2%, 42% 8%, 50% 20%, 58% 8%, 70% 2%, 86% 6%, 98% 20%, 100% 38%, 92% 58%)',
+  star:    'polygon(50% 0%, 61% 34%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 34%)',
+  diamond: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
+  hexagon: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
+  shield:  'polygon(50% 0%, 100% 14%, 100% 56%, 50% 100%, 0% 56%, 0% 14%)',
+  flower:  null
+};
+
+const FLOWER_SVG = encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g fill="#fff">' +
+  '<circle cx="50" cy="22" r="21"/><circle cx="74" cy="36" r="21"/>' +
+  '<circle cx="74" cy="64" r="21"/><circle cx="50" cy="78" r="21"/>' +
+  '<circle cx="26" cy="64" r="21"/><circle cx="26" cy="36" r="21"/>' +
+  '<circle cx="50" cy="50" r="24"/></g></svg>'
+);
+card.style.setProperty('--flower', 'url("data:image/svg+xml;utf8,' + FLOWER_SVG + '")');
+
+function applyShape() {
+  const flower = state.shape === 'flower';
+  const cp = SHAPES[state.shape];
+  [avatarShape, frameDeco].forEach(el => {
+    el.classList.toggle('shape-flower', flower);
+    el.style.clipPath = flower ? 'none' : cp;
+    el.style.webkitClipPath = flower ? 'none' : cp;
+  });
+}
+
+/* =========================================================
+   FRAMES
+   ========================================================= */
+const FRAMES = {
+  none:      { orbit: null },
+  neon:      { orbit: null },
+  glow:      { orbit: null },
+  wings:     { orbit: null },
+  halo:      { orbit: null },
+  celestial: { orbit: ['🌙', '✦', '✧'], count: 3,  dur: 18, radius: 92 },
+  roses:     { orbit: ['🌹', '🌸'],      count: 6,  dur: 24, radius: 92 },
+  crystal:   { orbit: ['💎', '◇'],       count: 5,  dur: 20, radius: 92 },
+  thorns:    { orbit: ['✧', '·'],        count: 14, dur: 34, radius: 88 },
+  stars:     { orbit: ['✦', '✧', '⋆'],   count: 9,  dur: 22, radius: 94 },
+  butterfly: { orbit: ['🦋', '✦'],       count: 4,  dur: 22, radius: 92 },
+  vines:     { orbit: ['🌿', '·'],       count: 10, dur: 30, radius: 90 }
+};
+
+function applyFrame() {
+  [...card.classList].forEach(c => { if (c.startsWith('frame-')) card.classList.remove(c); });
+  if (state.frame !== 'none') card.classList.add('frame-' + state.frame);
+
+  const cfg = FRAMES[state.frame].orbit;
+  orbit.innerHTML = '';
+  if (cfg) {
+    orbit.style.setProperty('--dur', cfg.dur + 's');
+    orbit.classList.add('on');
+    const items = cfg.orbit;
+    for (let i = 0; i < cfg.count; i++) {
+      const angle = (360 / cfg.count) * i;
+      const el = document.createElement('i');
+      el.textContent = items[i % items.length];
+      el.style.transform = `rotate(${angle}deg) translateY(-${cfg.radius}px)`;
+      el.style.fontSize = (i % 2 === 0 ? 16 : 12) + 'px';
+      el.style.color = i % 2 === 0 ? '#fff' : 'var(--accent)';
+      orbit.appendChild(el);
+    }
+  } else {
+    orbit.classList.remove('on');
+  }
+}
+
+/* =========================================================
+   BANNER
+   ========================================================= */
+const BANNERS = ['aurora', 'mist', 'ocean', 'rain', 'blossom', 'gradient', 'cosmos'];
+function applyBanner() {
+  BANNERS.forEach(b => banner.classList.remove('b-' + b));
+  banner.classList.add('b-' + state.banner);
+}
+
+/* =========================================================
+   COLORS / LAYOUT
+   ========================================================= */
+function applyColors() {
+  card.style.setProperty('--accent', state.accent);
+  card.style.setProperty('--accent2', state.accent2);
+  card.style.setProperty('--glow', state.glow);
+  card.style.setProperty('--card-bg', state.cardBg);
+}
+function applyLayout() {
+  card.style.width = state.width + 'px';
+  card.style.borderRadius = state.radius + 'px';
+  banner.style.height = state.bannerHeight + 'px';
+  avatarOuter.style.width = state.avatarSize + 'px';
+  avatarOuter.style.height = state.avatarSize + 'px';
+  avatarOuter.style.marginTop = (-state.avatarSize * 0.42) + 'px';
+  setTimeout(resizeCanvas, 60);
+}
+
+/* =========================================================
+   PROFILE TEXT
+   ========================================================= */
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function applyProfileText() {
+  pName.textContent = state.name || 'Vespera';
+  pName.style.fontFamily = FONTS[state.fontStyle] || FONTS.outfit;
+  pName.style.fontSize = state.nameSize + 'px';
+  pName.style.color = state.nameColor;
+
+  pHandle.textContent = state.handle || '@stardust';
+  pHandle.style.fontFamily = FONTS[state.fontStyle] || FONTS.outfit;
+  pHandle.style.color = state.handleColor;
+
+  pBadges.innerHTML = '';
+  pBadges.style.display = state.showBadges ? 'flex' : 'none';
+  (state.badges || []).forEach(b => {
+    const t = (b || '').trim();
+    if (!t) return;
+    const span = document.createElement('span');
+    span.textContent = t;
+    pBadges.appendChild(span);
+  });
+}
+
+/* =========================================================
+   PARTICLE ENGINE
+   ========================================================= */
+let W = 0, H = 0, parts = [], raf = null;
+
+function resizeCanvas() {
+  const r = card.getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  W = r.width; H = r.height;
+  canvas.width  = Math.round(W * dpr);
+  canvas.height = Math.round(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function rand(a, b) { return a + Math.random() * (b - a); }
+
+function initParticle(p) {
+  const t = state.effect;
+  p.x = Math.random() * W;
+  p.y = Math.random() * H;
+  p.phase = Math.random() * Math.PI * 2;
+
+  switch (t) {
+    case 'stars':
+      p.r = rand(0.5, 1.9); p.tw = rand(0.015, 0.05); break;
+    case 'fireflies':
+      p.r = rand(1.2, 2.8); p.vx = rand(-0.35, 0.35); p.vy = rand(-0.35, 0.35); p.ph = Math.random() * 6.28; break;
+    case 'petals':
+      p.size = rand(4, 9); p.rot = Math.random() * 6.28; p.vr = rand(-0.03, 0.03);
+      p.vy = rand(0.25, 0.75); p.vx = rand(-0.3, 0.3); p.sway = Math.random() * 6.28;
+      p.hue = Math.random() > 0.5 ? state.accent : state.accent2; break;
+    case 'bubbles':
+      p.r = rand(2.5, 9); p.vy = rand(-0.6, -0.2); p.vx = rand(-0.25, 0.25); break;
+    case 'embers':
+      p.r = rand(0.9, 2.6); p.vy = rand(-1.1, -0.4); p.vx = rand(-0.25, 0.25); break;
+    case 'sparkles':
+      p.size = rand(3, 7); p.vx = rand(-0.18, 0.18); p.vy = rand(-0.18, 0.18); break;
+    case 'rain':
+      p.x = Math.random() * W; p.y = rand(-H, 0); p.len = rand(9, 20);
+      p.vy = rand(5, 10); p.vx = rand(-0.4, 0.4); p.alpha = rand(0.4, 0.85); break;
+    case 'snow':
+      p.r = rand(1, 3); p.vx = rand(-0.4, 0.4); p.vy = rand(0.4, 1.1);
+      p.ph = Math.random() * 6.28; p.alpha = rand(0.5, 1); break;
+    case 'meteor':
+      p.x = Math.random() * (W + 200) - 100; p.y = rand(-60, H * 0.4);
+      p.vx = rand(3.5, 6.5); p.vy = rand(1.8, 3.4);
+      p.len = rand(28, 60); p.alpha = 1; break;
+    case 'hearts':
+      p.size = rand(5, 11); p.vx = rand(-0.2, 0.2); p.vy = rand(-0.8, -0.3);
+      p.ph = Math.random() * 6.28; p.hue = Math.random() > 0.5 ? state.accent : state.accent2; break;
+  }
+  return p;
+}
+
+function buildParticles() {
+  parts = [];
+  if (state.effect === 'none') { stopLoop(); drawNothing(); return; }
+  let n = Math.round(state.density);
+  if (state.effect === 'meteor') n = Math.max(4, Math.round(n / 6));
+  for (let i = 0; i < n; i++) parts.push(initParticle({}));
+  startLoop();
+}
+
+function wrap(p) {
+  if (p.y > H + 40) { p.y = -40; p.x = Math.random() * W; }
+  if (p.y < -40)    { p.y = H + 40; p.x = Math.random() * W; }
+  if (p.x > W + 40) p.x = -40;
+  if (p.x < -40)    p.x = W + 40;
+}
+
+function update(p) {
+  const s = state.speed;
+  switch (state.effect) {
+    case 'stars': p.phase += p.tw * s; break;
+    case 'fireflies':
+      p.ph += 0.02 * s;
+      p.x += Math.cos(p.ph * 1.4) * 0.65 * s + p.vx;
+      p.y += Math.sin(p.ph) * 0.55 * s + p.vy;
+      break;
+    case 'petals':
+      p.rot += p.vr * s; p.sway += 0.028 * s;
+      p.x += Math.sin(p.sway) * 0.9 * s + p.vx;
+      p.y += p.vy * s; break;
+    case 'bubbles':
+      p.x += p.vx * s + Math.sin(p.y * 0.02 + p.phase) * 0.35;
+      p.y += p.vy * s; break;
+    case 'embers':
+      p.x += p.vx * s + Math.sin(p.y * 0.03 + p.phase) * 0.4;
+      p.y += p.vy * s; break;
+    case 'sparkles':
+      p.phase += 0.045 * s; p.x += p.vx * s; p.y += p.vy * s; break;
+    case 'rain':
+      p.x += p.vx * s; p.y += p.vy * s;
+      if (p.y > H + 20) { p.y = -20; p.x = Math.random() * W; }
+      break;
+    case 'snow':
+      p.ph += 0.03 * s;
+      p.x += Math.sin(p.ph) * 0.5 * s + p.vx;
+      p.y += p.vy * s; break;
+    case 'meteor':
+      p.x += p.vx * s; p.y += p.vy * s; p.alpha -= 0.008 * s;
+      if (p.alpha <= 0 || p.y > H + 60 || p.x > W + 60) {
+        p.x = -60; p.y = rand(-40, H * 0.4); p.alpha = 1;
+        p.vx = rand(3.5, 6.5); p.vy = rand(1.8, 3.4);
+      }
+      break;
+    case 'hearts':
+      p.ph += 0.03 * s;
+      p.x += Math.sin(p.ph) * 0.5 * s + p.vx;
+      p.y += p.vy * s;
+      if (p.y < -30) { p.y = H + 30; p.x = Math.random() * W; }
+      break;
+  }
+  wrap(p);
+}
+
+function drawHeart(cx, cy, size, color) {
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.scale(size / 10, size / 10);
+  ctx.beginPath();
+  ctx.moveTo(0, 3);
+  ctx.bezierCurveTo(-6, -4, -11, 3, 0, 11);
+  ctx.bezierCurveTo(11, 3, 6, -4, 0, 3);
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.restore();
+}
+
+function draw(p) {
+  const t = state.effect;
+  ctx.save();
+
+  if (t === 'stars') {
+    const a = 0.35 + 0.65 * Math.abs(Math.sin(p.phase));
+    ctx.globalAlpha = a; ctx.fillStyle = '#ffffff';
+    ctx.shadowBlur = 10; ctx.shadowColor = state.accent;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill();
+  }
+  else if (t === 'fireflies') {
+    const a = 0.35 + 0.65 * Math.abs(Math.sin(p.ph * 1.6));
+    ctx.globalAlpha = a; ctx.shadowBlur = 16; ctx.shadowColor = state.accent;
+    ctx.fillStyle = state.accent;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill();
+    ctx.shadowBlur = 0; ctx.globalAlpha = a * 0.9; ctx.fillStyle = '#ffffff';
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 0.4, 0, 6.2832); ctx.fill();
+  }
+  else if (t === 'petals') {
+    ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+    ctx.globalAlpha = 0.75; ctx.fillStyle = p.hue;
+    ctx.shadowBlur = 8; ctx.shadowColor = p.hue;
+    ctx.beginPath(); ctx.ellipse(0, 0, p.size, p.size * 0.55, 0, 0, 6.2832); ctx.fill();
+  }
+  else if (t === 'bubbles') {
+    ctx.globalAlpha = 0.5; ctx.strokeStyle = state.accent2; ctx.lineWidth = 1.1;
+    ctx.shadowBlur = 8; ctx.shadowColor = state.accent2;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.stroke();
+    ctx.globalAlpha = 0.75; ctx.fillStyle = '#ffffff';
+    ctx.beginPath(); ctx.arc(p.x - p.r * 0.32, p.y - p.r * 0.32, Math.max(0.6, p.r * 0.18), 0, 6.2832); ctx.fill();
+  }
+  else if (t === 'embers') {
+    const fade = Math.min(1, Math.max(0, (H - p.y) / (H * 0.9)));
+    ctx.globalAlpha = 0.25 + fade * 0.7; ctx.shadowBlur = 14; ctx.shadowColor = state.accent;
+    ctx.fillStyle = state.accent;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill();
+    ctx.globalAlpha = fade * 0.9; ctx.fillStyle = '#fff3d0';
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 0.45, 0, 6.2832); ctx.fill();
+  }
+  else if (t === 'sparkles') {
+    const a = 0.25 + 0.75 * Math.abs(Math.sin(p.phase));
+    const s = p.size * (0.6 + 0.5 * Math.abs(Math.sin(p.phase)));
+    ctx.globalAlpha = a; ctx.translate(p.x, p.y);
+    ctx.fillStyle = '#ffffff'; ctx.shadowBlur = 12; ctx.shadowColor = state.accent2;
+    ctx.beginPath();
+    ctx.moveTo(0, -s);
+    ctx.quadraticCurveTo(0, 0, s, 0);
+    ctx.quadraticCurveTo(0, 0, 0, s);
+    ctx.quadraticCurveTo(0, 0, -s, 0);
+    ctx.quadraticCurveTo(0, 0, 0, -s);
+    ctx.fill();
+  }
+  else if (t === 'rain') {
+    ctx.globalAlpha = p.alpha; ctx.strokeStyle = state.accent2; ctx.lineWidth = 1.2;
+    ctx.shadowBlur = 4; ctx.shadowColor = state.accent2;
+    ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x - p.vx * 2, p.y - p.len); ctx.stroke();
+  }
+  else if (t === 'snow') {
+    ctx.globalAlpha = p.alpha; ctx.fillStyle = '#ffffff';
+    ctx.shadowBlur = 6; ctx.shadowColor = '#ffffff';
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.2832); ctx.fill();
+  }
+  else if (t === 'meteor') {
+    const tx = p.x - p.vx * (p.len / 8);
+    const ty = p.y - p.vy * (p.len / 8);
+    const grad = ctx.createLinearGradient(p.x, p.y, tx, ty);
+    grad.addColorStop(0, `rgba(255,255,255,${p.alpha})`);
+    grad.addColorStop(1, `rgba(255,255,255,0)`);
+    ctx.strokeStyle = grad; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(tx, ty); ctx.stroke();
+    ctx.globalAlpha = p.alpha; ctx.fillStyle = '#ffffff';
+    ctx.shadowBlur = 10; ctx.shadowColor = state.accent;
+    ctx.beginPath(); ctx.arc(p.x, p.y, 1.6, 0, 6.2832); ctx.fill();
+  }
+  else if (t === 'hearts') {
+    const a = 0.4 + 0.6 * Math.abs(Math.sin(p.ph));
+    ctx.globalAlpha = a; ctx.shadowBlur = 8; ctx.shadowColor = p.hue;
+    drawHeart(p.x, p.y, p.size, p.hue);
+  }
+
+  ctx.restore();
+}
+
+function drawNothing() { ctx.clearRect(0, 0, W, H); }
+
+function loop() {
+  ctx.clearRect(0, 0, W, H);
+  for (let i = 0; i < parts.length; i++) {
+    update(parts[i]);
+    draw(parts[i]);
+  }
+  raf = requestAnimationFrame(loop);
+}
+function startLoop() { if (!raf) raf = requestAnimationFrame(loop); }
+function stopLoop()  { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+
+function refreshParticles() {
+  stopLoop();
+  resizeCanvas();
+  buildParticles();
+}
+
+/* =========================================================
+   TABS
+   ========================================================= */
+const tabsEl = document.getElementById('tabs');
+function openTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.tab === name));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('on', p.dataset.pane === name));
+}
+tabsEl.addEventListener('click', e => {
+  const btn = e.target.closest('.tab');
+  if (!btn) return;
+  openTab(btn.dataset.tab);
+});
+
+/* =========================================================
+   COLLAPSE
+   ========================================================= */
+const collapseBtn = document.getElementById('collapseBtn');
+collapseBtn.addEventListener('click', () => {
+  const collapsed = panel.classList.toggle('collapsed');
+  collapseBtn.setAttribute('aria-expanded', String(!collapsed));
+});
+
+/* =========================================================
+   CHIP WIRING
+   ========================================================= */
+function wireChips(id, key, cb) {
+  const box = document.getElementById(id);
+  if (!box) return;
+  box.addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    [...box.children].forEach(c => c.classList.remove('on'));
+    btn.classList.add('on');
+    state[key] = btn.dataset[key];
+    cb();
+  });
+}
+
+wireChips('shapeChips',  'shape',  applyShape);
+wireChips('frameChips',  'frame',  applyFrame);
+wireChips('bannerChips', 'banner', applyBanner);
+wireChips('effectChips', 'effect', refreshParticles);
+wireChips('fontChips',   'fontStyle', applyProfileText);
+
+/* =========================================================
+   SLIDERS
+   ========================================================= */
+function bindSlider(id, valId, key, cb, fmt) {
+  const el  = document.getElementById(id);
+  const val = document.getElementById(valId);
+  el.addEventListener('input', e => {
+    state[key] = +e.target.value;
+    val.textContent = fmt ? fmt(+e.target.value) : (+e.target.value + 'px');
+    cb();
+  });
+}
+
+bindSlider('density',      'densityVal',      'density',      refreshParticles, v => v);
+bindSlider('speed',        'speedVal',        'speed',        ()=>{},           v => v.toFixed(1) + '×');
+bindSlider('glow',         'glowVal',         'glow',         applyColors,      v => v.toFixed(1));
+bindSlider('width',        'widthVal',        'width',        applyLayout,      v => v + 'px');
+bindSlider('radius',       'radiusVal',       'radius',       applyLayout,      v => v + 'px');
+bindSlider('avatarSize',   'avatarSizeVal',   'avatarSize',   applyLayout,      v => v + 'px');
+bindSlider('bannerHeight', 'bannerHeightVal', 'bannerHeight', applyLayout,      v => v + 'px');
+bindSlider('nameSize',     'nameSizeVal',     'nameSize',     applyProfileText, v => v + 'px');
+
+/* =========================================================
+   COLORS
+   ========================================================= */
+document.getElementById('accent').addEventListener('input',  e => { state.accent  = e.target.value; applyColors(); });
+document.getElementById('accent2').addEventListener('input', e => { state.accent2 = e.target.value; applyColors(); });
+document.getElementById('cardBg').addEventListener('input',  e => { state.cardBg  = e.target.value; applyColors(); });
+document.getElementById('nameColor').addEventListener('input', e => { state.nameColor = e.target.value; applyProfileText(); });
+document.getElementById('handleColor').addEventListener('input', e => { state.handleColor = e.target.value; applyProfileText(); });
+
+/* =========================================================
+   PROFILE INPUTS
+   ========================================================= */
+document.getElementById('nameInput').addEventListener('input', e => {
+  state.name = e.target.value; applyProfileText();
+});
+document.getElementById('handleInput').addEventListener('input', e => {
+  state.handle = e.target.value; applyProfileText();
+});
+document.getElementById('badgesInput').addEventListener('input', e => {
+  state.badges = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+  applyProfileText();
+});
+document.getElementById('showBadgesToggle').addEventListener('click', e => {
+  state.showBadges = !state.showBadges;
+  e.currentTarget.classList.toggle('on', state.showBadges);
+  applyProfileText();
+});
+
+/* =========================================================
+   UPLOADS
+   ========================================================= */
+document.getElementById('avatarFile').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  if (!/^image\/(png|jpeg|gif)$/.test(f.type)) { toast('⚠️ Use PNG, JPG, or GIF'); return; }
+  avatarImg.src = URL.createObjectURL(f);
+  toast('🖼️ Avatar updated');
+});
+document.getElementById('bannerFile').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  if (!/^image\/(png|jpeg|gif)$/.test(f.type)) { toast('⚠️ Use PNG, JPG, or GIF'); return; }
+  if (f.size > 10 * 1024 * 1024) { toast('⚠️ Banner must be under 10 MB'); return; }
+  bannerImg.src = URL.createObjectURL(f);
+  bannerImg.style.display = 'block';
+  toast('🌌 Banner updated');
+});
+
+/* =========================================================
+   PRESETS
+   ========================================================= */
+const PRESETS = {
+  celestial: { shape: 'circle',  frame: 'celestial', effect: 'stars',    banner: 'aurora',   accent: '#a78bfa', accent2: '#22d3ee', glow: 1.2 },
+  gothic:    { shape: 'circle',  frame: 'thorns',    effect: 'embers',   banner: 'mist',     accent: '#ef4444', accent2: '#7c3aed', glow: 1.4 },
+  pastel:    { shape: 'heart',   frame: 'roses',     effect: 'petals',   banner: 'blossom',  accent: '#f9a8d4', accent2: '#a7f3d0', glow: 0.9 },
+  cyber:     { shape: 'hexagon', frame: 'neon',      effect: 'sparkles', banner: 'rain',     accent: '#22d3ee', accent2: '#f0abfc', glow: 1.8 },
+  floral:    { shape: 'flower',  frame: 'roses',     effect: 'petals',   banner: 'blossom',  accent: '#fb7185', accent2: '#86efac', glow: 1.0 },
+  rainbow:   { shape: 'star',    frame: 'halo',      effect: 'bubbles',  banner: 'gradient', accent: '#f472b6', accent2: '#38bdf8', glow: 1.6 }
+};
+
+function syncChips(boxId, key) {
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  [...box.children].forEach(c => c.classList.toggle('on', c.dataset[key] === state[key]));
+}
+
+function syncAllUI() {
+  syncChips('shapeChips', 'shape');
+  syncChips('frameChips', 'frame');
+  syncChips('effectChips', 'effect');
+  syncChips('bannerChips', 'banner');
+  syncChips('fontChips', 'fontStyle');
+
+  document.getElementById('accent').value = state.accent;
+  document.getElementById('accent2').value = state.accent2;
+  document.getElementById('cardBg').value = state.cardBg;
+  document.getElementById('nameColor').value = state.nameColor;
+  document.getElementById('handleColor').value = state.handleColor;
+
+  document.getElementById('glow').value = state.glow;
+  document.getElementById('glowVal').textContent = state.glow.toFixed(1);
+  document.getElementById('density').value = state.density;
+  document.getElementById('densityVal').textContent = state.density;
+  document.getElementById('speed').value = state.speed;
+  document.getElementById('speedVal').textContent = state.speed.toFixed(1) + '×';
+  document.getElementById('width').value = state.width;
+  document.getElementById('widthVal').textContent = state.width + 'px';
+  document.getElementById('radius').value = state.radius;
+  document.getElementById('radiusVal').textContent = state.radius + 'px';
+  document.getElementById('avatarSize').value = state.avatarSize;
+  document.getElementById('avatarSizeVal').textContent = state.avatarSize + 'px';
+  document.getElementById('bannerHeight').value = state.bannerHeight;
+  document.getElementById('bannerHeightVal').textContent = state.bannerHeight + 'px';
+  document.getElementById('nameSize').value = state.nameSize;
+  document.getElementById('nameSizeVal').textContent = state.nameSize + 'px';
+
+  document.getElementById('nameInput').value = state.name;
+  document.getElementById('handleInput').value = state.handle;
+  document.getElementById('badgesInput').value = state.badges.join(', ');
+  document.getElementById('showBadgesToggle').classList.toggle('on', state.showBadges);
+}
+
+function applyPreset(name) {
+  const p = PRESETS[name];
+  if (!p) return;
+  Object.assign(state, p);
+  syncAllUI();
+  applyColors(); applyShape(); applyFrame(); applyBanner();
+  applyProfileText(); applyLayout(); refreshParticles();
+  panel.classList.remove('collapsed');
+  collapseBtn.setAttribute('aria-expanded', 'true');
+}
+
+document.querySelector('.vibe-grid').addEventListener('click', e => {
+  const btn = e.target.closest('.vibe');
+  if (!btn) return;
+  applyPreset(btn.dataset.preset);
+});
+
+/* =========================================================
+   SAVE / LOAD
+   ========================================================= */
+const STORAGE_KEY = 'vespera_saves_v3';
+function loadSaves() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch { return []; }
+}
+function persistSaves(list) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+function renderSaves() {
+  const list = loadSaves();
+  const box = document.getElementById('savedList');
+  if (!list.length) {
+    box.innerHTML = '<p class="empty-note">No saved presets yet. Tune your card, then save it above.</p>';
+    return;
+  }
+  box.innerHTML = '';
+  list.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'saved-item';
+    div.innerHTML = `
+      <div class="si-swatch" style="background:linear-gradient(135deg,${item.state.accent || '#a78bfa'},${item.state.accent2 || '#22d3ee'})"></div>
+      <div class="si-name">${escapeHtml(item.name)}</div>
+      <button class="si-load" data-id="${item.id}" title="Load">↺</button>
+      <button class="si-del" data-id="${item.id}" title="Delete">✕</button>
+    `;
+    box.appendChild(div);
+  });
+  box.querySelectorAll('.si-load').forEach(b => {
+    b.addEventListener('click', () => {
+      const s = loadSaves().find(x => x.id === b.dataset.id);
+      if (!s) return;
+      Object.assign(state, s.state);
+      syncAllUI();
+      applyColors(); applyShape(); applyFrame(); applyBanner();
+      applyProfileText(); applyLayout(); refreshParticles();
+      toast('✨ Loaded "' + s.name + '"');
+    });
+  });
+  box.querySelectorAll('.si-del').forEach(b => {
+    b.addEventListener('click', () => {
+      const list2 = loadSaves().filter(x => x.id !== b.dataset.id);
+      persistSaves(list2);
+      renderSaves();
+      toast('🗑️ Deleted');
+    });
+  });
+}
+
+document.getElementById('saveBtn').addEventListener('click', () => {
+  const nameEl = document.getElementById('saveName');
+  const name = (nameEl.value || '').trim() || 'Untitled look';
+  const list = loadSaves();
+  list.unshift({
+    id: 'v_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+    name,
+    state: JSON.parse(JSON.stringify(state))
+  });
+  if (list.length > 20) list.length = 20;
+  persistSaves(list);
+  nameEl.value = '';
+  renderSaves();
+  toast('💾 Saved "' + name + '"');
+});
+
+/* =========================================================
+   SHARE / URL STATE
+   ========================================================= */
+function encodeState() {
+  const compact = {
+    s: state.shape, f: state.frame, e: state.effect, b: state.banner,
+    d: state.density, sp: state.speed, a: state.accent, a2: state.accent2,
+    g: state.glow, w: state.width, r: state.radius,
+    n: state.name, h: state.handle, bd: state.badges, fst: state.fontStyle,
+    as: state.avatarSize, bh: state.bannerHeight, cb: state.cardBg,
+    ns: state.nameSize, nc: state.nameColor, hc: state.handleColor,
+    sb: state.showBadges
+  };
+  return btoa(unescape(encodeURIComponent(JSON.stringify(compact))));
+}
+function decodeState(encoded) {
+  try {
+    const obj = JSON.parse(decodeURIComponent(escape(atob(encoded))));
+    return {
+      shape: obj.s, frame: obj.f, effect: obj.e, banner: obj.b,
+      density: obj.d, speed: obj.sp, accent: obj.a, accent2: obj.a2,
+      glow: obj.g, width: obj.w, radius: obj.r,
+      name: obj.n, handle: obj.h, badges: obj.bd, fontStyle: obj.fst,
+      avatarSize: obj.as, bannerHeight: obj.bh, cardBg: obj.cb,
+      nameSize: obj.ns, nameColor: obj.nc, handleColor: obj.hc,
+      showBadges: obj.sb !== false
+    };
+  } catch { return null; }
+}
+
+document.getElementById('shareBtn').addEventListener('click', () => {
+  const url = location.origin + location.pathname + '#p=' + encodeState();
+  navigator.clipboard.writeText(url).then(
+    () => toast('🔗 Share link copied!'),
+    () => { prompt('Copy this link:', url); }
+  );
+});
+
+document.getElementById('copyConfigBtn').addEventListener('click', () => {
+  const json = JSON.stringify(state, null, 2);
+  navigator.clipboard.writeText(json).then(
+    () => toast('📋 Config copied!'),
+    () => { prompt('Copy your config:', json); }
+  );
+});
+
+/* =========================================================
+   FULLSCREEN
+   ========================================================= */
+const fsModal = document.getElementById('fsModal');
+const fsWrapper = document.getElementById('fsWrapper');
+const cardPlaceholder = document.createElement('div');
+card.parentNode.insertBefore(cardPlaceholder, card);
+
+function openFullscreen() {
+  fsWrapper.appendChild(card);
+  fsModal.classList.add('open');
+  setTimeout(resizeCanvas, 100);
+}
+function closeFullscreen() {
+  cardPlaceholder.parentNode.insertBefore(card, cardPlaceholder);
+  fsModal.classList.remove('open');
+  setTimeout(resizeCanvas, 60);
+}
+document.getElementById('fullscreenBtn').addEventListener('click', openFullscreen);
+document.getElementById('fsClose').addEventListener('click', closeFullscreen);
+fsModal.addEventListener('click', e => {
+  if (e.target === fsModal) closeFullscreen();
+});
+
+/* =========================================================
+   RANDOMIZE / RESET
+   ========================================================= */
+const RANDOM_SHAPES  = ['circle', 'rounded', 'heart', 'star', 'diamond', 'hexagon', 'shield', 'flower'];
+const RANDOM_FRAMES  = ['neon', 'glow', 'celestial', 'roses', 'crystal', 'thorns', 'stars', 'wings', 'halo', 'butterfly', 'vines'];
+const RANDOM_EFFECTS = ['stars', 'fireflies', 'petals', 'bubbles', 'embers', 'sparkles', 'rain', 'snow', 'meteor', 'hearts'];
+const RANDOM_BANNERS = ['aurora', 'mist', 'ocean', 'rain', 'blossom', 'gradient', 'cosmos'];
+const RANDOM_HUES    = [0, 30, 60, 120, 170, 200, 260, 300, 330];
+
+function hsl(h, s, l) {
+  s /= 100; l /= 100;
+  const k = n => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  const toHex = x => Math.round(255 * x).toString(16).padStart(2, '0');
+  return '#' + toHex(f(0)) + toHex(f(8)) + toHex(f(4));
+}
+
+function randomize() {
+  const h1 = RANDOM_HUES[Math.floor(Math.random() * RANDOM_HUES.length)];
+  const h2 = (h1 + 60 + Math.random() * 180) % 360;
+  state.shape  = RANDOM_SHAPES[Math.floor(Math.random() * RANDOM_SHAPES.length)];
+  state.frame  = RANDOM_FRAMES[Math.floor(Math.random() * RANDOM_FRAMES.length)];
+  state.effect = RANDOM_EFFECTS[Math.floor(Math.random() * RANDOM_EFFECTS.length)];
+  state.banner = RANDOM_BANNERS[Math.floor(Math.random() * RANDOM_BANNERS.length)];
+  state.accent  = hsl(h1, 75, 68);
+  state.accent2 = hsl(h2, 78, 62);
+  state.glow    = +(0.6 + Math.random() * 1.4).toFixed(1);
+  syncAllUI();
+  applyColors(); applyShape(); applyFrame(); applyBanner(); refreshParticles();
+}
+
+function resetAll() {
+  Object.assign(state, {
+    shape: 'circle', frame: 'none', effect: 'stars', banner: 'aurora',
+    accent: '#a78bfa', accent2: '#22d3ee', cardBg: '#100c1c', glow: 1,
+    density: 50, speed: 1, width: 380, radius: 24,
+    avatarSize: 150, bannerHeight: 132,
+    name: 'Vespera', handle: '@stardust · dreaming in neon',
+    badges: ['✦ Celestial', '♡ Dreamer', '🌙 Night Owl'],
+    fontStyle: 'outfit',
+    nameSize: 23, nameColor: '#ece9f7', handleColor: '#9a94b8',
+    showBadges: true
+  });
+  bannerImg.style.display = 'none';
+  avatarImg.src = DEFAULT_AVATAR;
+  syncAllUI();
+  applyColors(); applyShape(); applyFrame(); applyBanner();
+  applyProfileText(); applyLayout(); refreshParticles();
+}
+
+document.getElementById('randomize').addEventListener('click', randomize);
+document.getElementById('reset').addEventListener('click', resetAll);
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+let toastTimer;
+function toast(msg) {
+  let el = document.querySelector('.toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.className = 'toast';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  requestAnimationFrame(() => el.classList.add('show'));
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+   ========================================================= */
+document.addEventListener('keydown', e => {
+  const tag = (e.target.tagName || '').toLowerCase();
+  if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+  const k = e.key.toLowerCase();
+  if (k === 'r') { e.preventDefault(); randomize(); toast('🎲 Surprise!'); }
+  else if (k === 'x') { e.preventDefault(); resetAll(); toast('↺ Reset'); }
+  else if (k === 'v') {
+    e.preventDefault();
+    const c = panel.classList.toggle('collapsed');
+    collapseBtn.setAttribute('aria-expanded', String(!c));
+  }
+  else if (k === 'f') {
+    e.preventDefault();
+    if (fsModal.classList.contains('open')) closeFullscreen();
+    else openFullscreen();
+  }
+  else if (k === 's') {
+    e.preventDefault();
+    openTab('vibes');
+    panel.classList.remove('collapsed');
+    collapseBtn.setAttribute('aria-expanded', 'true');
+    setTimeout(() => document.getElementById('saveName').focus(), 200);
+  }
+});
+
+/* =========================================================
+   NAV LINK → open tab
+   ========================================================= */
+document.querySelectorAll('[data-open-tab]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    openTab(el.dataset.openTab);
+    panel.classList.remove('collapsed');
+    collapseBtn.setAttribute('aria-expanded', 'true');
+    document.getElementById('studio').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+/* =========================================================
+   CHAT WIDGET
+   ========================================================= */
+const CHAT_KEY = 'vespera_chat_v1';
+const AVATAR_GRADIENTS = [
+  ['#a78bfa', '#22d3ee'], ['#f472b6', '#a78bfa'], ['#34d399', '#22d3ee'],
+  ['#fbbf24', '#f472b6'], ['#60a5fa', '#a78bfa'], ['#fb7185', '#f59e0b'],
+  ['#c084fc', '#ec4899'], ['#14b8a6', '#84cc16']
+];
+
+const chatFab = document.getElementById('chatFab');
+const chatTeaser = document.getElementById('chatTeaser');
+const chatPanel = document.getElementById('chatPanel');
+const chatBadge = document.getElementById('chatBadge');
+const chatListView = document.getElementById('chatListView');
+const chatConvView = document.getElementById('chatConvView');
+const chatContacts = document.getElementById('chatContacts');
+const chatMessages = document.getElementById('chatMessages');
+const chatForm = document.getElementById('chatForm');
+const chatInput = document.getElementById('chatInput');
+const chatTitle = document.getElementById('chatTitle');
+const chatStatus = document.getElementById('chatStatus');
+const chatHeaderIcon = document.getElementById('chatHeaderIcon');
+const chatBackBtn = document.getElementById('chatBackBtn');
+const chatCloseBtn = document.getElementById('chatCloseBtn');
+const chatAddRow = document.getElementById('chatAddRow');
+const chatModal = document.getElementById('chatModal');
+const chatUsername = document.getElementById('chatUsername');
+const chatCancelBtn = document.getElementById('chatCancelBtn');
+const chatConfirmBtn = document.getElementById('chatConfirmBtn');
+
+let chatState = { contacts: [], activeId: null };
+let hasOpenedChat = false;
+
+function hashUsername(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+function avatarGradient(username) {
+  return AVATAR_GRADIENTS[hashUsername(username) % AVATAR_GRADIENTS.length];
+}
+function loadChat() {
+  try {
+    const raw = localStorage.getItem(CHAT_KEY);
+    if (raw) chatState = JSON.parse(raw);
+  } catch {}
+  if (!chatState.contacts) chatState.contacts = [];
+  if (!chatState.activeId) chatState.activeId = null;
+}
+function persistChat() {
+  localStorage.setItem(CHAT_KEY, JSON.stringify(chatState));
+}
+function updateChatBadge() {
+  const total = chatState.contacts.reduce((n, c) => n + (c.unread || 0), 0);
+  if (total > 0) {
+    chatBadge.textContent = total > 9 ? '9+' : total;
+    chatBadge.hidden = false;
+  } else {
+    chatBadge.hidden = true;
+  }
+}
+function timeShort(ts) {
+  const d = new Date(ts);
+  const now = new Date();
+  if (d.toDateString() === now.toDateString())
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+}
+function timeFull(ts) {
+  return new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function renderContacts() {
+  if (!chatState.contacts.length) {
+    chatContacts.innerHTML =
+      '<div class="chat-empty"><span>💬</span>No contacts yet.<br>Add someone by their username to start chatting.<small>Messages are stored locally on this device.</small></div>';
+    return;
+  }
+  chatContacts.innerHTML = '';
+  const sorted = [...chatState.contacts].sort((a, b) => {
+    const ta = a.messages.length ? a.messages[a.messages.length - 1].ts : (a.createdAt || 0);
+    const tb = b.messages.length ? b.messages[b.messages.length - 1].ts : (b.createdAt || 0);
+    return tb - ta;
+  });
+  sorted.forEach(c => {
+    const [g1, g2] = avatarGradient(c.username);
+    const cleanName = c.username.replace(/^@/, '');
+    const initial = cleanName[0]?.toUpperCase() || '?';
+    const last = c.messages.length ? c.messages[c.messages.length - 1] : null;
+    const preview = last ? (last.from === 'me' ? 'You: ' : '') + last.text : 'No messages yet';
+    const time = last ? timeShort(last.ts) : '';
+    const div = document.createElement('div');
+    div.className = 'chat-contact';
+    div.dataset.id = c.id;
+    div.setAttribute('role', 'button');
+    div.setAttribute('tabindex', '0');
+    div.innerHTML = `
+      <div class="avatar" style="background:linear-gradient(135deg,${g1},${g2})">${initial}</div>
+      <div class="info">
+        <div class="name">@${escapeHtml(cleanName)}</div>
+        <div class="preview">${escapeHtml(preview)}</div>
+      </div>
+      <div class="meta">
+        <span class="time">${time}</span>
+        ${c.unread ? `<span class="unread">${c.unread > 9 ? '9+' : c.unread}</span>` : ''}
+      </div>
+      <button class="del" data-del="${c.id}" title="Remove" aria-label="Remove contact">✕</button>
+    `;
+    chatContacts.appendChild(div);
+  });
+}
+
+function renderMessages() {
+  const c = chatState.contacts.find(x => x.id === chatState.activeId);
+  if (!c) return;
+  chatMessages.innerHTML = '';
+  if (!c.messages.length) {
+    chatMessages.innerHTML =
+      `<div class="chat-system">Say hi to @${escapeHtml(c.username.replace(/^@/, ''))} 👋</div>`;
+    return;
+  }
+  c.messages.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'chat-msg ' + (m.from === 'me' ? 'sent' : 'received');
+    div.innerHTML = `${escapeHtml(m.text)}<span class="ts">${timeFull(m.ts)}</span>`;
+    chatMessages.appendChild(div);
+  });
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function openConversation(id) {
+  const c = chatState.contacts.find(x => x.id === id);
+  if (!c) return;
+  chatState.activeId = id;
+  c.unread = 0;
+  persistChat();
+  updateChatBadge();
+  chatListView.hidden = true;
+  chatConvView.hidden = false;
+  chatBackBtn.hidden = false;
+  
+  const [g1, g2] = avatarGradient(c.username);
+  const cleanName = c.username.replace(/^@/, '');
+  chatTitle.textContent = '@' + cleanName;
+  chatHeaderIcon.style.background = `linear-gradient(135deg, ${g1}, ${g2})`;
+  chatHeaderIcon.textContent = cleanName[0]?.toUpperCase() || '?';
+  chatStatus.textContent = 'Online';
+  
+  renderMessages();
+  setTimeout(() => chatInput.focus(), 100);
+}
+
+function closeConversation() {
+  chatState.activeId = null;
+  persistChat();
+  chatListView.hidden = false;
+  chatConvView.hidden = true;
+  chatBackBtn.hidden = true;
+  
+  chatTitle.textContent = 'Messages';
+  chatHeaderIcon.style.background = 'linear-gradient(135deg, #a78bfa, #22d3ee)';
+  chatHeaderIcon.textContent = 'V';
+  chatStatus.textContent = 'Active now';
+  
+  renderContacts();
+}
+
+function addContact() {
+  const raw = (chatUsername.value || '').trim().replace(/^@+/, '');
+  if (!raw) { toast('⚠️ Enter a username'); return; }
+  if (!/^[a-zA-Z0-9_.-]{2,32}$/.test(raw)) {
+    toast('⚠️ Letters, numbers, . _ - only (2–32 chars)');
+    return;
+  }
+  if (chatState.contacts.some(c =>
+    c.username.replace(/^@/, '').toLowerCase() === raw.toLowerCase()
+  )) {
+    toast('⚠️ Already in your contacts');
+    return;
+  }
+  const contact = {
+    id: 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+    username: raw,
+    messages: [],
+    unread: 0,
+    createdAt: Date.now()
+  };
+  chatState.contacts.unshift(contact);
+  persistChat();
+  chatModal.classList.remove('open');
+  chatUsername.value = '';
+  toast('✅ Added @' + raw);
+  renderContacts();
+  setTimeout(() => openConversation(contact.id), 80);
+}
+
+function sendMessage(text) {
+  const c = chatState.contacts.find(x => x.id === chatState.activeId);
+  if (!c) return;
+  c.messages.push({ from: 'me', text, ts: Date.now() });
+  persistChat();
+  renderMessages();
+  renderContacts();
+}
+
+// Chat events
+chatFab.addEventListener('click', () => {
+  const open = chatPanel.classList.toggle('open');
+  chatPanel.setAttribute('aria-hidden', String(!open));
+  chatTeaser.classList.remove('show');
+  hasOpenedChat = true;
+  
+  if (open) {
+    if (chatState.activeId && chatState.contacts.some(c => c.id === chatState.activeId)) {
+      openConversation(chatState.activeId);
+    } else {
+      chatListView.hidden = false;
+      chatConvView.hidden = true;
+      chatBackBtn.hidden = true;
+      chatTitle.textContent = 'Messages';
+      chatHeaderIcon.style.background = 'linear-gradient(135deg, #a78bfa, #22d3ee)';
+      chatHeaderIcon.textContent = 'V';
+      chatStatus.textContent = 'Active now';
+      renderContacts();
+    }
+  }
+});
+
+chatTeaser.addEventListener('click', () => {
+  if (!chatPanel.classList.contains('open')) chatFab.click();
+});
+
+chatCloseBtn.addEventListener('click', () => {
+  chatPanel.classList.remove('open');
+  chatPanel.setAttribute('aria-hidden', 'true');
+});
+
+chatBackBtn.addEventListener('click', closeConversation);
+
+chatAddRow.addEventListener('click', () => {
+  chatModal.classList.add('open');
+  setTimeout(() => chatUsername.focus(), 80);
+});
+
+chatCancelBtn.addEventListener('click', () => chatModal.classList.remove('open'));
+chatConfirmBtn.addEventListener('click', addContact);
+chatUsername.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); addContact(); }
+});
+chatModal.addEventListener('click', e => {
+  if (e.target === chatModal) chatModal.classList.remove('open');
+});
+
+chatContacts.addEventListener('click', e => {
+  const del = e.target.closest('[data-del]');
+  if (del) {
+    e.stopPropagation();
+    const id = del.dataset.del;
+    chatState.contacts = chatState.contacts.filter(c => c.id !== id);
+    persistChat();
+    if (chatState.activeId === id) {
+      closeConversation();
+    } else {
+      renderContacts();
+    }
+    updateChatBadge();
+    return;
+  }
+  const contact = e.target.closest('.chat-contact');
+  if (contact) openConversation(contact.dataset.id);
+});
+
+chatContacts.addEventListener('keydown', e => {
+  const contact = e.target.closest('.chat-contact');
+  if (contact && (e.key === 'Enter' || e.key === ' ')) {
+    e.preventDefault();
+    openConversation(contact.dataset.id);
+  }
+});
+
+chatForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const text = chatInput.value.trim();
+  if (!text) return;
+  sendMessage(text);
+  chatInput.value = '';
+  chatInput.focus();
+});
+
+// Show teaser after a short delay if chat hasn't been opened
+setTimeout(() => {
+  if (!hasOpenedChat && !chatPanel.classList.contains('open')) {
+    chatTeaser.classList.add('show');
+  }
+}, 3500);
+
+// Hide teaser on click elsewhere
+document.addEventListener('click', e => {
+  if (chatTeaser.classList.contains('show') && !chatTeaser.contains(e.target) && !chatFab.contains(e.target)) {
+    chatTeaser.classList.remove('show');
+  }
+});
+
+// Initialize chat
+loadChat();
+updateChatBadge();
+
+/* =========================================================
+   INIT
+   ========================================================= */
+applyColors();
+applyShape();
+applyFrame();
+applyBanner();
+applyProfileText();
+applyLayout();
+renderSaves();
+
+(function loadFromHash() {
+  if (location.hash.startsWith('#p=')) {
+    const loaded = decodeState(location.hash.slice(3));
+    if (loaded) {
+      Object.assign(state, loaded);
+      syncAllUI();
+      applyColors(); applyShape(); applyFrame(); applyBanner();
+      applyProfileText(); applyLayout(); refreshParticles();
+    }
+  }
+})();
+
+new ResizeObserver(() => { resizeCanvas(); }).observe(card);
+window.addEventListener('load', refreshParticles);
+setTimeout(refreshParticles, 120);
+</script>
+</body>
+  </html>
